@@ -19,7 +19,7 @@ namespace LexicalTools
             switch (LexClass)
             {
                 case LexemClass.KeyWord:
-                    className = "Key Word";
+                    className = "Key word";
                     break;
                 case LexemClass.Identifier:
                     className = "Indentifier";
