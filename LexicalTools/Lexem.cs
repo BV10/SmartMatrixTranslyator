@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LexicalTools
 {
     public class Lexem
-    {
+    {        
         public string Lex { get; set; }
         public LexemClass LexClass { get; set; }
         public int NumberInClass { get; set; }

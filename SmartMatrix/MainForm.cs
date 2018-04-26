@@ -75,11 +75,14 @@ namespace SmartMatrix
 
             lexemAnalyzator.Code = richTextBoxTextOfProgram.Text;
             List<Lexem> listLexem = lexemAnalyzator.GetLexems();
+
             List<string> lexemsInStr = new List<string>(listLexem.Count);
             foreach (var lexem in listLexem)
             {
                 lexemsInStr.Add(lexem.ToString());
             }
+
+
             
             using (StreamWriter writer = new StreamWriter(File.Open("F:\\lexems.txt", FileMode.OpenOrCreate)))
             {
