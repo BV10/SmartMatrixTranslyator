@@ -8,7 +8,7 @@ namespace LexicalTools
 {
     public class Lexem
     {
-        public string Lex { get; set; }
+        public string Lex { get; set;  }
         public LexemClass LexClass { get; set; }
         public int NumberInClass { get; set; }
         public PositionInMultiStr PositionInMultiStr { get; set; }
