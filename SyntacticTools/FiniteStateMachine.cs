@@ -10,13 +10,10 @@ using LexicalTools;
 namespace SyntacticTools
 {
     public class FiniteStateMachine
-    {    
-
-        // EndProgram
-       // public const int EndProgram = -666;
+    {
 
         // read for ll1 from file 
-        public StreamReader StreamReader { get; set; }      
+        public StreamReader StreamReader { get; set; }
         public string StartNotTerminal { get; set; }
 
         // states of machine
@@ -24,12 +21,96 @@ namespace SyntacticTools
         // grammar 
         public List<Rule> Grammar { get; private set; } = new List<Rule>();
 
+        // current state of machine
+        private int CurrentStatePosition = 0;
+
+        // stack for save states
+        private Stack<int> StackSavedStates { get; set; } = new Stack<int>();
+
+        // error description
+        public Error ErrorSyntax { get; private set; }
+
         //----------------------------------------------------------------------------------
 
         public FiniteStateMachine(StreamReader streamReader, string startNotTerminal)
         {
             StreamReader = streamReader;
             StartNotTerminal = startNotTerminal;
+        }
+
+        public StateMachine Handle(Lexem lexem)
+        {
+            RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
+            // 1 correct lexem
+            bool isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
+
+            // 2 admit error
+            if (!isCorrectLexem && currentRecordTable.Error)
+            {
+                ErrorSyntax = new Error(ExceptedLexems(currentRecordTable.ExpectedLexems));
+                CurrentStatePosition = 0;
+                return StateMachine.Error;
+            }
+                
+
+            // 3 need from stack
+            if (currentRecordTable.FromStack)
+            {
+                if (StackSavedStates.Count == 0) // end of program
+                {
+                    CurrentStatePosition = 0;
+                    return StateMachine.EndProgram;
+                }                    
+                else // need next state from stack
+                {
+                    currentRecordTable.NextState = StackSavedStates.Pop();
+                }                   
+            }
+
+            CurrentStatePosition = currentRecordTable.NextState;
+
+            return 0;
+        }
+
+        private string ExceptedLexems(List<string> expectedLexems)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("Error syntax: expected: ");
+
+            expectedLexems.ForEach((lexem) =>
+            {
+                stringBuilder.Append(lexem + " ");
+            });
+            
+            return stringBuilder.ToString();
+        }
+
+        private bool CheckLexem(Lexem lexem, int currentStatePosition)
+        {
+            List<string> expectedLexems = TableParseLL1[currentStatePosition].ExpectedLexems;
+
+            if (lexem.LexClass == LexemClass.Identifier)
+            {
+                if (expectedLexems.Find((match) => match.Equals("identifier")) != null) // identifier
+                    return true;
+                else
+                    return expectedLexems.Find((match) => match.Equals("eps")) != null;
+            }
+            else if (lexem.LexClass == LexemClass.Literal)
+            {
+                if (expectedLexems.Find((match) => match.Equals("literal")) != null) // literal
+                    return true;
+                else
+                    return expectedLexems.Find((match) => match.Equals("eps")) != null;
+            }
+            else
+            {
+                if (expectedLexems.Find((match) => match.Equals(lexem.Lex, StringComparison.CurrentCultureIgnoreCase)) != null) // key words or other
+                    return true;
+                else
+                    return expectedLexems.Find((match) => match.Equals("eps")) != null;
+            }
+            
         }
 
         public void BuildMachine()
@@ -62,14 +143,13 @@ namespace SyntacticTools
             int quantCheckAlterRules = 0;
             for (int iterGram = 0; iterGram < Grammar.Count; iterGram++)
             {
-                if (quantCheckAlterRules == 0)
+                if (quantCheckAlterRules == 0) // that's why not go along alternative rules
                 {
                     quantCheckAlterRules = AnalysLeftAlternativeParts(Grammar[iterGram], Grammar);
                 }
                 AnalysRightPart(Grammar[iterGram], Grammar);
-                quantCheckAlterRules--;
+                quantCheckAlterRules -= (quantCheckAlterRules == 0 ? 0 : 1);
             }
-
 
             TableParseLL1.ForEach((RecordTableLL1 rec) => Console.WriteLine(rec));
         }
@@ -78,7 +158,7 @@ namespace SyntacticTools
         {
             StreamWriter streamWriter = new StreamWriter(File.Create(pathFile));
             Grammar.ForEach((rule) =>
-            {                
+            {
                 streamWriter.WriteLine(rule);
             });
         }
@@ -101,10 +181,32 @@ namespace SyntacticTools
                 // fill record in table 
                 RecordTableLL1 recInTable = new RecordTableLL1();
                 bool isTerminal = IsTerminal(currentTerm);
-                recInTable.Accept = isTerminal; // знаходиться в стані терміналу, то +, інакше -.
-                recInTable.Error = true; //Завжди +, за виключенням станів відповідних нетерміналам в лівій частині альтернативних правил
-                recInTable.ToStack = !isTerminal && iterRightTerms != rightPart.Terms.Length - 1; //При переході на розбір нетерміналу, якщо він не останній в правій частині правила
-                recInTable.FromStack = isTerminal && iterRightTerms == rightPart.Terms.Length - 1; //При останньому терміналі або при пустому правилі здійснюється вилу-чення із стеку номера стану
+
+                // знаходиться в стані терміналу, то +, інакше -.
+                recInTable.Accept = isTerminal;
+
+                /*Завжди +, за виключенням станів відповідних нетерміналам в лівій частині 
+                 * альтернативних правил*/
+                recInTable.Error = true;
+
+                /*При переході на розбір нетерміналу, якщо він не останній в правій
+                 * частині правила*/
+                if (!isTerminal && iterRightTerms != rightPart.Terms.Length - 1)
+                {
+                    recInTable.ToStack = rightPart.Numbers[iterRightTerms];
+                }
+                else
+                {
+                    recInTable.ToStack = null;
+                }
+
+                /*При останньому терміналі або при пустому правилі здійснюється вилу-чення
+                 * із стеку номера стану*/
+                recInTable.FromStack = isTerminal && iterRightTerms == rightPart.Terms.Length - 1; 
+
+                /*Якщо стан відповідає терміналу, то він так і ставиться. Якщо нетерміналу - 
+                 * то направляючі символи нетермінала, а для альтернативних 
+                 * правих частин – направляючі символи цих альтернативних частин.*/
                 recInTable.ExpectedLexems = (isTerminal ?
                     new List<string>() { currentTerm } :
                     ExpectedLexemForNotTerminal(grammars, currentTerm, new List<string>()));
@@ -191,7 +293,7 @@ namespace SyntacticTools
                     Accept = false,
                     Error = false,
                     FromStack = false,
-                    ToStack = false,
+                    ToStack = null,
 
                     ExpectedLexems = (IsTerminal(expectedSymbol)
                     ? new List<string>() { expectedSymbol }
@@ -203,7 +305,7 @@ namespace SyntacticTools
                     TableParseLL1[TableParseLL1.Count - 1].Error = true;
             }
 
-            return alternativeRules.Count - 1;
+            return alternativeRules.Count;
         }
 
         private List<string> ExpectedLexemForNotTerminal(List<Rule> grammars, string notTerminal, List<string> lexems)

@@ -101,6 +101,10 @@
       <Project>{2125e1d3-2227-4ec8-bc79-12db12c104ee}</Project>
       <Name>LexicalTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SyntacticTools\SyntacticTools.csproj">
+      <Project>{17e06c7f-acd2-43f7-b5ac-fedb583a7931}</Project>
+      <Name>SyntacticTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\Program.txt" />

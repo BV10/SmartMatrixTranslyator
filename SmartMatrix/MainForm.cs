@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LexicalTools;
 using System.Runtime.InteropServices;
+using SyntacticTools;
 
 namespace SmartMatrix
 {
@@ -81,19 +82,24 @@ namespace SmartMatrix
                 lexemsInStr.Add(lexem.ToString());
             }
             
-            using (StreamWriter writer = new StreamWriter(File.Open("F:\\lexems.txt", FileMode.OpenOrCreate)))
-            {
-                foreach (var lexem in listLexem)
-                {
-                    listBoxLexems.Items.Add(lexem);
-                    writer.WriteLine(lexem);
-                }
-            }
+            //using (StreamWriter writer = new StreamWriter(File.Open("F:\\lexems.txt", FileMode.OpenOrCreate)))
+            //{
+            //    foreach (var lexem in listLexem)
+            //    {
+            //        listBoxLexems.Items.Add(lexem);
+            //        writer.WriteLine(lexem);
+            //    }
+            //}
                
             foreach (var error in lexemAnalyzator.ListError)
             {
                 listBoxErrors.Items.Add(error);
             }
+
+            SyntacticAnalyzator syntacticAnalyzator = new SyntacticAnalyzator(listLexem,
+                new FiniteStateMachine(new StreamReader(File.OpenRead("grammar.txt")), "Program"));
+            if(!syntacticAnalyzator.SyntaxAnalyze())
+                listBoxErrors.Items.Add(syntacticAnalyzator.ErrorSyntax);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)

@@ -12,7 +12,7 @@ namespace SyntacticTools
         public List<string> ExpectedLexems { get; set; }
         public int NextState { get; set; }
         public bool Accept { get; set; }
-        public bool ToStack { get; set; }
+        public int? ToStack { get; set; }
         public bool FromStack { get; set; }
         public bool Error { get; set; }
 
@@ -29,7 +29,7 @@ namespace SyntacticTools
             stringBuilder.Append((Accept ? "+" : "-"));
             stringBuilder.Append("\t");
 
-            stringBuilder.Append((ToStack ? "+" : "-"));
+            stringBuilder.Append((ToStack));
             stringBuilder.Append("\t");
 
             stringBuilder.Append((FromStack ? "+" : "-"));

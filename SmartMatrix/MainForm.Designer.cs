@@ -137,11 +137,11 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(670, 26);
+            this.label3.Location = new System.Drawing.Point(720, 26);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(220, 31);
+            this.label3.Size = new System.Drawing.Size(124, 31);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Lexical analysis";
+            this.label3.Text = "Analysis";
             // 
             // butAnalyzeProgram
             // 
@@ -158,23 +158,23 @@
             // 
             this.listBoxLexems.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBoxLexems.FormattingEnabled = true;
+            this.listBoxLexems.HorizontalScrollbar = true;
             this.listBoxLexems.ItemHeight = 16;
             this.listBoxLexems.Location = new System.Drawing.Point(571, 60);
             this.listBoxLexems.Name = "listBoxLexems";
             this.listBoxLexems.Size = new System.Drawing.Size(436, 356);
             this.listBoxLexems.TabIndex = 9;
-            this.listBoxLexems.HorizontalScrollbar = true;
             // 
             // listBoxErrors
             // 
             this.listBoxErrors.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBoxErrors.FormattingEnabled = true;
+            this.listBoxErrors.HorizontalScrollbar = true;
             this.listBoxErrors.ItemHeight = 16;
             this.listBoxErrors.Location = new System.Drawing.Point(571, 447);
             this.listBoxErrors.Name = "listBoxErrors";
             this.listBoxErrors.Size = new System.Drawing.Size(436, 132);
             this.listBoxErrors.TabIndex = 10;
-            this.listBoxErrors.HorizontalScrollbar = true;
             // 
             // richTextBoxNumberOfLines
             // 
@@ -197,11 +197,11 @@
             this.ButtonClear.UseVisualStyleBackColor = true;
             this.ButtonClear.Click += new System.EventHandler(this.ButtonClear_Click);
             // 
-            // textOfProgram
+            // richTextBoxTextOfProgram
             // 
             this.richTextBoxTextOfProgram.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBoxTextOfProgram.Location = new System.Drawing.Point(49, 60);
-            this.richTextBoxTextOfProgram.Name = "textOfProgram";
+            this.richTextBoxTextOfProgram.Name = "richTextBoxTextOfProgram";
             this.richTextBoxTextOfProgram.Size = new System.Drawing.Size(450, 356);
             this.richTextBoxTextOfProgram.TabIndex = 13;
             this.richTextBoxTextOfProgram.Text = "";

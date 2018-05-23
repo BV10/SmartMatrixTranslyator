@@ -10,33 +10,38 @@ using System.Text.RegularExpressions;
 namespace SyntacticTools
 {
     public class SyntacticAnalyzator
-    {      
-        public List<Lexem> Lexems { get; set; } // list lexems 
-        public List<SyntaxError> SyntacticErrors { get; } // error of syntax      
+    {
+        private List<Lexem> lexems; // list lexems 
+        private FiniteStateMachine finiteStateMachin; // finite state machine     
 
-        public SyntacticAnalyzator(StreamReader streamReader, List<Lexem> lexems)
+        public List<Lexem> Lexems { get => lexems; set => lexems = value; }
+        private FiniteStateMachine FiniteStateMachin { get => finiteStateMachin; set => finiteStateMachin = value; }
+        public Error ErrorSyntax { get; private set; }
+
+        public SyntacticAnalyzator(List<Lexem> lexems, FiniteStateMachine finiteStateMachin)
         {
-            //StreamReader = streamReader;
-            //Lexems = lexems;
+            Lexems = lexems;
+            FiniteStateMachin = finiteStateMachin;
+            FiniteStateMachin.BuildMachine();
         }
 
-        public SyntacticAnalyzator() { }
-
-        bool SyntacticAnalysis()
-        {            
-
-           // BuildMachine(streamReader, ); // build machine of shop type            
-
-            return false;
-        }
-
-        private void BuildMachine(StreamReader streamReader, string startNotTerminal)
+        public bool SyntaxAnalyze()
         {
-            // read all rules from file
-            List<string> grammars = new List<string>();
-            while (!streamReader.EndOfStream)
-                grammars.Add(streamReader.ReadLine());
-            //
+            StateMachine stateMachine;
+            foreach (var lexem in Lexems)
+            {
+                stateMachine = FiniteStateMachin.Handle(lexem);
+                if (stateMachine == StateMachine.Error)
+                {
+                    ErrorSyntax = FiniteStateMachin.ErrorSyntax;
+                    return false;
+                }
+                else if(stateMachine == StateMachine.EndProgram)
+                {
+                    return true;
+                }            
+            }
+            return true;
         }
     }
 }
