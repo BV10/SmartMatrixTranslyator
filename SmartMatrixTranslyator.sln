@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix", "SmartMatrix\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexicalTools", "LexicalTools\LexicalTools.csproj", "{2125E1D3-2227-4EC8-BC79-12DB12C104EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntacticTools", "SyntacticTools\SyntacticTools.csproj", "{17E06C7F-ACD2-43F7-B5AC-FEDB583A7931}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSyntact", "TestSyntact\TestSyntact.csproj", "{C00454E6-E645-4A0E-A36C-CFAD903F754E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2125E1D3-2227-4EC8-BC79-12DB12C104EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2125E1D3-2227-4EC8-BC79-12DB12C104EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2125E1D3-2227-4EC8-BC79-12DB12C104EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E06C7F-ACD2-43F7-B5AC-FEDB583A7931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E06C7F-ACD2-43F7-B5AC-FEDB583A7931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E06C7F-ACD2-43F7-B5AC-FEDB583A7931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E06C7F-ACD2-43F7-B5AC-FEDB583A7931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C00454E6-E645-4A0E-A36C-CFAD903F754E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C00454E6-E645-4A0E-A36C-CFAD903F754E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C00454E6-E645-4A0E-A36C-CFAD903F754E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C00454E6-E645-4A0E-A36C-CFAD903F754E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
