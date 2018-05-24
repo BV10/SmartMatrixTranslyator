@@ -96,8 +96,13 @@ namespace SmartMatrix
                 listBoxErrors.Items.Add(error);
             }
 
+            // tempary fix bag
+            listLexem.Find((lexem) => lexem.Lex.Equals("main", StringComparison.CurrentCultureIgnoreCase)).LexClass = LexemClass.KeyWord;
+
             SyntacticAnalyzator syntacticAnalyzator = new SyntacticAnalyzator(listLexem,
                 new FiniteStateMachine(new StreamReader(File.OpenRead("grammar.txt")), "Program"));
+            syntacticAnalyzator.FiniteStateMachin.SaveNumericGrammar("NumericGrammar");
+            syntacticAnalyzator.FiniteStateMachin.SaveTableParse("TableParseLL1");
             if(!syntacticAnalyzator.SyntaxAnalyze())
                 listBoxErrors.Items.Add(syntacticAnalyzator.ErrorSyntax);
         }

@@ -15,7 +15,7 @@ namespace SyntacticTools
         private FiniteStateMachine finiteStateMachin; // finite state machine     
 
         public List<Lexem> Lexems { get => lexems; set => lexems = value; }
-        private FiniteStateMachine FiniteStateMachin { get => finiteStateMachin; set => finiteStateMachin = value; }
+        public FiniteStateMachine FiniteStateMachin { get => finiteStateMachin; private set => finiteStateMachin = value; }
         public Error ErrorSyntax { get; private set; }
 
         public SyntacticAnalyzator(List<Lexem> lexems, FiniteStateMachine finiteStateMachin)

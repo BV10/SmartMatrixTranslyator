@@ -25,7 +25,7 @@ namespace SyntacticTools
         private int CurrentStatePosition = 0;
 
         // stack for save states
-        private Stack<int> StackSavedStates { get; set; } = new Stack<int>();
+        private Stack<int?> StackSavedStates { get; set; } = new Stack<int?>();
 
         // error description
         public Error ErrorSyntax { get; private set; }
@@ -41,36 +41,53 @@ namespace SyntacticTools
         public StateMachine Handle(Lexem lexem)
         {
             RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
-            // 1 correct lexem
-            bool isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
-            // 2 admit error
-            if (!isCorrectLexem && currentRecordTable.Error)
-            {
-                ErrorSyntax = new Error(ExceptedLexems(currentRecordTable.ExpectedLexems));
-                CurrentStatePosition = 0;
-                return StateMachine.Error;
-            }
-                
+            // go along while not accept rule            
+            while(!TableParseLL1[CurrentStatePosition].Accept)
+            {                
+                // 1 correct lexem
+                 bool isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
-            // 3 need from stack
-            if (currentRecordTable.FromStack)
-            {
-                if (StackSavedStates.Count == 0) // end of program
+                // 2 admit error
+                if (!isCorrectLexem && currentRecordTable.Error) // not correct and error
                 {
+                    ErrorSyntax = new Error(ExceptedLexems(currentRecordTable.ExpectedLexems));
                     CurrentStatePosition = 0;
-                    return StateMachine.EndProgram;
-                }                    
-                else // need next state from stack
+                    return StateMachine.Error;
+                }
+                if (!isCorrectLexem && !currentRecordTable.Error) // not correct and not error go in alterantive left rule
                 {
-                    currentRecordTable.NextState = StackSavedStates.Pop();
-                }                   
+                    CurrentStatePosition++;
+                    currentRecordTable = TableParseLL1[CurrentStatePosition];
+                    continue;
+                }
+
+                //  3 need to stack               
+                if (currentRecordTable.ToStack != null)
+                    StackSavedStates.Push(currentRecordTable.ToStack);
+
+                // 4 need from stack
+                if (currentRecordTable.FromStack)
+                {
+                    if (StackSavedStates.Count == 0) // end of program
+                    {
+                        CurrentStatePosition = 0;
+                        return StateMachine.EndProgram;
+                    }                    
+                    else // need next state from stack
+                    {
+                         currentRecordTable.NextState = StackSavedStates.Pop().Value;
+                    }                   
+                }
+
+                CurrentStatePosition = currentRecordTable.NextState;
+                currentRecordTable = TableParseLL1[CurrentStatePosition];
             }
 
-            CurrentStatePosition = currentRecordTable.NextState;
 
-            return 0;
-        }
+
+            return StateMachine.Cool;
+        }    
 
         private string ExceptedLexems(List<string> expectedLexems)
         {
@@ -156,11 +173,14 @@ namespace SyntacticTools
 
         public void SaveNumericGrammar(string pathFile)
         {
-            StreamWriter streamWriter = new StreamWriter(File.Create(pathFile));
-            Grammar.ForEach((rule) =>
+            using(StreamWriter streamWriter = new StreamWriter(File.Create(pathFile)))
             {
-                streamWriter.WriteLine(rule);
-            });
+                 Grammar.ForEach((rule) =>
+                {
+                    streamWriter.WriteLine(rule);
+                });
+            }
+           
         }
 
         public void SaveTableParse(string pathFile)
@@ -193,7 +213,7 @@ namespace SyntacticTools
                  * частині правила*/
                 if (!isTerminal && iterRightTerms != rightPart.Terms.Length - 1)
                 {
-                    recInTable.ToStack = rightPart.Numbers[iterRightTerms];
+                    recInTable.ToStack = rightPart.Numbers[iterRightTerms + 1];
                 }
                 else
                 {
