@@ -53,6 +53,9 @@
     <Content Include="bin\Debug\KeyWords.txt" />
     <Content Include="bin\Debug\Operations.txt" />
     <Content Include="bin\Debug\Separators.txt" />
+    <Content Include="resources\KeyWords.txt" />
+    <Content Include="resources\Operations.txt" />
+    <Content Include="resources\Separators.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -40,18 +40,22 @@ namespace SyntacticTools
 
         public StateMachine Handle(Lexem lexem)
         {
-            RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
+ eps:       RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
+            bool isCorrectLexem;
 
-            // go along while not accept rule            
-            while(!TableParseLL1[CurrentStatePosition].Accept)
+            #region I) go along while not accept rule            
+            while (!TableParseLL1[CurrentStatePosition].Accept)
             {                
                 // 1 correct lexem
-                 bool isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
+                isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
                 // 2 admit error
                 if (!isCorrectLexem && currentRecordTable.Error) // not correct and error
                 {
-                    ErrorSyntax = new Error(ExceptedLexems(currentRecordTable.ExpectedLexems));
+                    // add error
+                    ErrorSyntax = new Error("Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
+                    ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
+
                     CurrentStatePosition = 0;
                     return StateMachine.Error;
                 }
@@ -83,8 +87,49 @@ namespace SyntacticTools
                 CurrentStatePosition = currentRecordTable.NextState;
                 currentRecordTable = TableParseLL1[CurrentStatePosition];
             }
+            #endregion
 
+            #region II) accept rule
 
+            // 1 correct lexem
+            isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
+
+            // 2 error lexem
+            if (!isCorrectLexem) // not correct and error
+            {
+                ErrorSyntax = new Error("Syntax error - Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
+                ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
+
+                CurrentStatePosition = 0;
+                return StateMachine.Error;
+            }
+
+            // 3 need from stack
+            if (currentRecordTable.FromStack)
+            {
+                if (StackSavedStates.Count == 0) // end of program
+                {
+                    CurrentStatePosition = 0;
+                    return StateMachine.EndProgram;
+                }
+                else // need next state from stack
+                {
+                    currentRecordTable.NextState = StackSavedStates.Pop().Value;
+                }
+            }
+
+            // expected lexem eps, check again
+            if(currentRecordTable.ExpectedLexems.Count == 1 && currentRecordTable.ExpectedLexems[0].Equals("eps"))
+            {
+                CurrentStatePosition = currentRecordTable.NextState;
+                currentRecordTable = TableParseLL1[CurrentStatePosition];
+                goto eps;
+            }
+
+            CurrentStatePosition = currentRecordTable.NextState;
+            currentRecordTable = TableParseLL1[CurrentStatePosition];
+
+            #endregion
 
             return StateMachine.Cool;
         }    
@@ -92,13 +137,21 @@ namespace SyntacticTools
         private string ExceptedLexems(List<string> expectedLexems)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("Error syntax: expected: ");
 
-            expectedLexems.ForEach((lexem) =>
+            stringBuilder.Append("[");
+
+            for (int iterLexem =0; iterLexem < expectedLexems.Count; iterLexem++)
             {
-                stringBuilder.Append(lexem + " ");
-            });
+                if(iterLexem == expectedLexems.Count - 1)
+                {
+                    stringBuilder.Append(expectedLexems[iterLexem]);
+                    break;
+                }                    
+                stringBuilder.Append(expectedLexems[iterLexem] + ", ");
+            }
+           
             
+            stringBuilder.Append("]");
             return stringBuilder.ToString();
         }
 

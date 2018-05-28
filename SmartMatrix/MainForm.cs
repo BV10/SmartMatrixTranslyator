@@ -29,6 +29,10 @@ namespace SmartMatrix
         FSM fSM;
         StorageLexem storageLexem;
         LexemAnalyzator lexemAnalyzator;
+        // directory resources
+        readonly string directResources = Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName).FullName + "\\resources";
+
+
         public MainForm()
         {    
 
@@ -82,29 +86,54 @@ namespace SmartMatrix
                 lexemsInStr.Add(lexem.ToString());
             }
             
-            //using (StreamWriter writer = new StreamWriter(File.Open("F:\\lexems.txt", FileMode.OpenOrCreate)))
-            //{
-            //    foreach (var lexem in listLexem)
-            //    {
-            //        listBoxLexems.Items.Add(lexem);
-            //        writer.WriteLine(lexem);
-            //    }
-            //}
-               
+            using (StreamWriter writer = new StreamWriter(File.Create(directResources + "lexems.txt")))
+            {
+                foreach (var lexem in listLexem)
+                {
+                    listBoxLexems.Items.Add(lexem);
+                    writer.WriteLine(lexem);
+                }
+            }
+
             foreach (var error in lexemAnalyzator.ListError)
             {
                 listBoxErrors.Items.Add(error);
             }
 
-            // tempary fix bag
-            listLexem.Find((lexem) => lexem.Lex.Equals("main", StringComparison.CurrentCultureIgnoreCase)).LexClass = LexemClass.KeyWord;
+            // have lexical errors, or empty lexems
+            if(lexemAnalyzator.ListError.Count != 0 || listLexem.Count == 0 || listLexem == null)
+            {
+                return;
+            }
+                       
 
             SyntacticAnalyzator syntacticAnalyzator = new SyntacticAnalyzator(listLexem,
-                new FiniteStateMachine(new StreamReader(File.OpenRead("grammar.txt")), "Program"));
-            syntacticAnalyzator.FiniteStateMachin.SaveNumericGrammar("NumericGrammar");
-            syntacticAnalyzator.FiniteStateMachin.SaveTableParse("TableParseLL1");
+                new FiniteStateMachine(new StreamReader(File.OpenRead(directResources + "\\grammar.txt")), "Program"));
+            syntacticAnalyzator.FiniteStateMachin.SaveNumericGrammar(directResources + "\\NumericGrammar.txt");
+            syntacticAnalyzator.FiniteStateMachin.SaveTableParse(directResources + "\\TableParseLL1.txt");
             if(!syntacticAnalyzator.SyntaxAnalyze())
-                listBoxErrors.Items.Add(syntacticAnalyzator.ErrorSyntax);
+            {
+                Error errorSyntax = syntacticAnalyzator.ErrorSyntax;
+
+
+
+                //Select the line from it's number
+                PositionInMultiStr positionInMultiSt = errorSyntax.PositionInMultiStr;
+                int startIndex = richTextBoxTextOfProgram.GetFirstCharIndexFromLine(positionInMultiSt.numberLine - 1);
+                richTextBoxTextOfProgram.Select(startIndex + positionInMultiSt.startPos, positionInMultiSt.endPos - positionInMultiSt.startPos);
+
+
+                //Set the selected text fore and background color
+                richTextBoxTextOfProgram.SelectionColor = System.Drawing.Color.Red;
+                //richTextBoxTextOfProgram.SelectionBackColor = System.Drawing.Color.Blue;            
+
+
+                listBoxErrors.Items.Add(errorSyntax);
+            }
+            else
+            {
+                this.correctSyntax.Visible = true;
+            }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -216,6 +245,9 @@ namespace SmartMatrix
         {
             listBoxLexems.Items.Clear();
             listBoxErrors.Items.Clear();
+            richTextBoxTextOfProgram.SelectAll();
+            richTextBoxTextOfProgram.SelectionColor = System.Drawing.Color.Black;
+            this.correctSyntax.Visible = false;
         }
     }
 }

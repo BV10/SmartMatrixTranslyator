@@ -1,0 +1,2 @@
+﻿"Det", "Transp", "boolean", "double", "else", "false", "for", "if", "integer", 
+"matrix", "string", "true", "return", "void", 

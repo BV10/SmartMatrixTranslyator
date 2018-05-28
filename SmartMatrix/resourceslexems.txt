@@ -1,0 +1,95 @@
+void --- Key word(13). Line: 1. Position in line: [0,4).
+main --- Key word(-1). Line: 1. Position in line: [5,9).
+( --- Separator(2). Line: 1. Position in line: [9,10).
+) --- Separator(3). Line: 1. Position in line: [10,11).
+{ --- Separator(0). Line: 2. Position in line: [0,1).
+integer --- Key word(8). Line: 3. Position in line: [0,7).
+i --- Indentifier(9). Line: 3. Position in line: [8,9).
+= --- Operation(0). Line: 3. Position in line: [10,11).
+ewrfq123 --- Indentifier(10). Line: 3. Position in line: [12,20).
+; --- Separator(6). Line: 3. Position in line: [20,21).
+for --- Key word(6). Line: 4. Position in line: [1,4).
+( --- Separator(2). Line: 4. Position in line: [4,5).
+i --- Indentifier(11). Line: 4. Position in line: [5,6).
+= --- Operation(0). Line: 4. Position in line: [7,8).
+0 --- Literal(0). Line: 4. Position in line: [9,10).
+; --- Separator(6). Line: 4. Position in line: [10,11).
+i --- Indentifier(12). Line: 4. Position in line: [12,13).
+< --- Operation(9). Line: 4. Position in line: [13,14).
+2 --- Literal(1). Line: 4. Position in line: [14,15).
+; --- Separator(6). Line: 4. Position in line: [15,16).
+i --- Indentifier(13). Line: 4. Position in line: [17,18).
+= --- Operation(0). Line: 4. Position in line: [19,20).
+i --- Indentifier(14). Line: 4. Position in line: [21,22).
++ --- Operation(6). Line: 4. Position in line: [22,23).
+1 --- Literal(2). Line: 4. Position in line: [23,24).
+) --- Separator(3). Line: 4. Position in line: [24,25).
+{ --- Separator(0). Line: 5. Position in line: [1,2).
+for --- Key word(6). Line: 6. Position in line: [2,5).
+( --- Separator(2). Line: 6. Position in line: [5,6).
+j --- Indentifier(15). Line: 6. Position in line: [6,7).
+= --- Operation(0). Line: 6. Position in line: [7,8).
+0 --- Literal(3). Line: 6. Position in line: [8,9).
+; --- Separator(6). Line: 6. Position in line: [9,10).
+j --- Indentifier(16). Line: 6. Position in line: [11,12).
+< --- Operation(9). Line: 6. Position in line: [12,13).
+2 --- Literal(4). Line: 6. Position in line: [13,14).
+; --- Separator(6). Line: 6. Position in line: [14,15).
+j --- Indentifier(17). Line: 6. Position in line: [16,17).
+= --- Operation(0). Line: 6. Position in line: [18,19).
+j --- Indentifier(18). Line: 6. Position in line: [20,21).
++ --- Operation(6). Line: 6. Position in line: [21,22).
+1 --- Literal(5). Line: 6. Position in line: [22,23).
+) --- Separator(3). Line: 6. Position in line: [23,24).
+{ --- Separator(0). Line: 7. Position in line: [2,3).
+matr1 --- Indentifier(19). Line: 8. Position in line: [3,8).
+[ --- Separator(4). Line: 8. Position in line: [8,9).
+i --- Indentifier(20). Line: 8. Position in line: [9,10).
+, --- Separator(7). Line: 8. Position in line: [10,11).
+j --- Indentifier(21). Line: 8. Position in line: [11,12).
+] --- Separator(5). Line: 8. Position in line: [12,13).
+= --- Operation(0). Line: 8. Position in line: [14,15).
+0.0 --- Literal(6). Line: 8. Position in line: [16,19).
+; --- Separator(6). Line: 8. Position in line: [19,20).
+} --- Separator(1). Line: 9. Position in line: [2,3).
+} --- Separator(1). Line: 10. Position in line: [1,2).
+PrintMatrix --- Indentifier(5). Line: 12. Position in line: [1,12).
+( --- Separator(2). Line: 12. Position in line: [12,13).
+"C:\\file.txt" --- Literal(7). Line: 12. Position in line: [13,27).
+, --- Separator(7). Line: 12. Position in line: [27,28).
+func --- Indentifier(22). Line: 12. Position in line: [29,33).
+( --- Separator(2). Line: 12. Position in line: [33,34).
+matr1 --- Indentifier(23). Line: 12. Position in line: [34,39).
+) --- Separator(3). Line: 12. Position in line: [39,40).
+) --- Separator(3). Line: 12. Position in line: [40,41).
+; --- Separator(6). Line: 12. Position in line: [41,42).
+} --- Separator(1). Line: 13. Position in line: [0,1).
+matrix --- Key word(9). Line: 15. Position in line: [0,6).
+func --- Indentifier(24). Line: 15. Position in line: [7,11).
+( --- Separator(2). Line: 15. Position in line: [11,12).
+matrix --- Key word(9). Line: 15. Position in line: [12,18).
+matr --- Indentifier(25). Line: 15. Position in line: [19,23).
+) --- Separator(3). Line: 15. Position in line: [23,24).
+{ --- Separator(0). Line: 16. Position in line: [0,1).
+string --- Key word(10). Line: 17. Position in line: [1,7).
+str --- Indentifier(26). Line: 17. Position in line: [8,11).
+= --- Operation(0). Line: 17. Position in line: [12,13).
+"Transp = " --- Literal(8). Line: 17. Position in line: [14,25).
+; --- Separator(6). Line: 17. Position in line: [25,26).
+PrintLine --- Indentifier(7). Line: 18. Position in line: [1,10).
+( --- Separator(2). Line: 18. Position in line: [10,11).
+str --- Indentifier(27). Line: 18. Position in line: [11,14).
+) --- Separator(3). Line: 18. Position in line: [14,15).
+; --- Separator(6). Line: 18. Position in line: [15,16).
+PrintLine --- Indentifier(7). Line: 19. Position in line: [1,10).
+( --- Separator(2). Line: 19. Position in line: [10,11).
+matr --- Indentifier(28). Line: 19. Position in line: [11,15).
+) --- Separator(3). Line: 19. Position in line: [15,16).
+; --- Separator(6). Line: 19. Position in line: [16,17).
+return --- Key word(12). Line: 21. Position in line: [1,7).
+Transp --- Indentifier(29). Line: 21. Position in line: [8,14).
+( --- Separator(2). Line: 21. Position in line: [14,15).
+matr --- Indentifier(30). Line: 21. Position in line: [15,19).
+) --- Separator(3). Line: 21. Position in line: [19,20).
+; --- Separator(6). Line: 21. Position in line: [20,21).
+} --- Separator(1). Line: 22. Position in line: [0,1).

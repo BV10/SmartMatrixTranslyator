@@ -1,0 +1,24 @@
+void main()
+{
+integer i = 1;
+	for(i = 0; i<2; i = i+1)
+	{
+		for(j=0; j<2; j = j+1)
+		{
+			matr1[i,j] = 0.0;
+		}
+	}
+	
+	PrintMatrix("C:\\file.txt", func(matr1));
+}
+
+matrix func(matrix matr)
+{
+	string str = "Transp = ";
+	PrintLine(str);
+	PrintLine(matr);
+	
+	return Transp(matr);
+}
+
+

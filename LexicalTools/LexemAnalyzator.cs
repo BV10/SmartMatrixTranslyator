@@ -59,7 +59,7 @@ namespace LexicalTools
                         break;
                     case FSM.Error_State:
                         PositionInMultiStr errorPosition = GetStringPositionInMultiStr(Code, startPos, endPos);
-                        ListError.Add(new Error("Lexical Error", errorPosition.numberLine, errorPosition.startPos, errorPosition.endPos));
+                        ListError.Add(new Error("Lexical Error", errorPosition));
                         //indexCh--; // rollback symbol                        
                         endPos++;
                         startPos = endPos;

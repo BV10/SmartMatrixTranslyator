@@ -3,31 +3,25 @@
     public class Error
     {
         string description;
-        int numberLine;
-        int startPos;
-        int endPos;
+        PositionInMultiStr positionInMultiStr;
 
         public Error(string description)
         {
             this.Description = description;
         }
 
-        public Error(string description, int numberLine, int startPos, int endPos) : this(description)
+        public Error(string description, PositionInMultiStr positionInMulti) : this(description)
         {
-            NumberLine = numberLine;
-            StartPos = startPos;
-            EndPos = endPos;
+            this.PositionInMultiStr = positionInMulti;
         }
 
         public string Description { get => description; set => description = value; }
-        public int NumberLine { get => numberLine; set => numberLine = value; }        
-        public int StartPos { get => startPos; set => startPos = value; }
-        public int EndPos { get => endPos; set => endPos = value; }
+        public PositionInMultiStr PositionInMultiStr { get => positionInMultiStr; set => positionInMultiStr = value; }
 
         public override string ToString()
         {
-            return "Decription: " + Description + ". Line: " + NumberLine + ". " + 
-                "Position in line: [" + startPos + ", " + endPos + "].";
+            return "Decription: " + Description + ". Line: " + PositionInMultiStr.numberLine + ". " + 
+                "Position in line: [" + PositionInMultiStr.startPos + ", " + PositionInMultiStr.endPos + "].";
         }
     }
 }

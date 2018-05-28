@@ -45,6 +45,7 @@
             this.richTextBoxNumberOfLines = new System.Windows.Forms.RichTextBox();
             this.ButtonClear = new System.Windows.Forms.Button();
             this.richTextBoxTextOfProgram = new System.Windows.Forms.RichTextBox();
+            this.correctSyntax = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -209,11 +210,24 @@
             this.richTextBoxTextOfProgram.VScroll += new System.EventHandler(this.textOfProgram_VScroll);
             this.richTextBoxTextOfProgram.TextChanged += new System.EventHandler(this.textOfProgram_TextChanged);
             // 
+            // correctSyntax
+            // 
+            this.correctSyntax.AutoSize = true;
+            this.correctSyntax.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.correctSyntax.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.correctSyntax.Location = new System.Drawing.Point(199, 419);
+            this.correctSyntax.Name = "correctSyntax";
+            this.correctSyntax.Size = new System.Drawing.Size(106, 16);
+            this.correctSyntax.TabIndex = 14;
+            this.correctSyntax.Text = "Correct syntax";
+            this.correctSyntax.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1072, 606);
+            this.Controls.Add(this.correctSyntax);
             this.Controls.Add(this.richTextBoxTextOfProgram);
             this.Controls.Add(this.ButtonClear);
             this.Controls.Add(this.richTextBoxNumberOfLines);
@@ -256,6 +270,7 @@
         private System.Windows.Forms.RichTextBox richTextBoxNumberOfLines;
         private System.Windows.Forms.Button ButtonClear;
         private System.Windows.Forms.RichTextBox richTextBoxTextOfProgram;
+        private System.Windows.Forms.Label correctSyntax;
     }
 }
 

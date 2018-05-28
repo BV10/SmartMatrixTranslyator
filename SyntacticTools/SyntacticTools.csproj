@@ -47,7 +47,6 @@
     <Compile Include="StatesMachine.cs" />
     <Compile Include="SyntacticAnalyzator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyntaxError.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LexicalTools\LexicalTools.csproj">
