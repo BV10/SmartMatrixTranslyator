@@ -1,324 +1,326 @@
 double integer string bool matrix void 	1	-		-	+	
 double integer string bool matrix void 	3	-	2	-	+	
-double integer string bool matrix void 	44	-		-	+	
-double integer string bool matrix 	5	-		-	-	
-void 	12	-		-	+	
-double integer string bool matrix 	27	-	6	-	+	
-identifier 	7	+		-	+	
-( 	8	+		-	+	
-double integer string bool matrix eps 	54	-	9	-	+	
-) 	10	+		-	+	
-; 	11	+		-	+	
+double integer string bool void matrix 	50	-		-	+	
+double integer string bool 	6	-		-	-	
+matrix 	13	-		-	-	
+void 	20	-		-	+	
+double integer string bool 	35	-	7	-	+	
+identifier 	8	+		-	+	
+( 	9	+		-	+	
+double integer string bool matrix eps 	70	-	10	-	+	
+) 	11	+		-	+	
+; 	12	+		-	+	
 double integer string bool matrix void 	3	-		-	+	
-void 	13	+		-	+	
-identifier main 	14	-		-	+	
-identifier 	16	-		-	-	
-main 	22	-		-	+	
-identifier 	17	+		-	+	
-( 	18	+		-	+	
-double integer string bool matrix eps 	54	-	19	-	+	
-) 	20	+		-	+	
-; 	21	+		-	+	
+matrix 	14	+		-	+	
+identifier 	15	+		-	+	
+( 	16	+		-	+	
+double integer string bool matrix eps 	70	-	17	-	+	
+) 	18	+		-	+	
+; 	19	+		-	+	
 double integer string bool matrix void 	3	-		-	+	
-main 	37	-		-	+	
-double integer string bool matrix 	25	-		-	-	
-void 	26	-		-	+	
-double integer string bool matrix 	27	-		-	+	
+void 	21	+		-	+	
+identifier main 	22	-		-	+	
+identifier 	24	-		-	-	
+main 	30	-		-	+	
+identifier 	25	+		-	+	
+( 	26	+		-	+	
+double integer string bool matrix eps 	70	-	27	-	+	
+) 	28	+		-	+	
+; 	29	+		-	+	
+double integer string bool matrix void 	3	-		-	+	
+main 	43	-		-	+	
+double integer string bool 	33	-		-	-	
+void 	34	-		-	+	
+double integer string bool 	35	-		-	+	
 void 	0	+		+	+	
-double 	32	-		-	-	
-integer 	33	-		-	-	
-string 	34	-		-	-	
-bool 	35	-		-	-	
-matrix 	36	-		-	+	
+double 	39	-		-	-	
+integer 	40	-		-	-	
+string 	41	-		-	-	
+bool 	42	-		-	+	
 double 	0	+		+	+	
 integer 	0	+		+	+	
 string 	0	+		+	+	
 bool 	0	+		+	+	
-matrix 	0	+		+	+	
-main 	38	-		-	+	
-main 	39	+		-	+	
-( 	40	+		-	+	
-) 	41	+		-	+	
-{ 	42	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-	43	-	+	
+main 	44	-		-	+	
+main 	45	+		-	+	
+( 	46	+		-	+	
+) 	47	+		-	+	
+{ 	48	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-	49	-	+	
 } 	0	+		+	+	
-double integer string bool matrix void 	45	-		-	+	
-double integer string bool matrix void 	23	-	46	-	+	
-identifier 	47	+		-	+	
-( 	48	+		-	+	
-double integer string bool matrix eps 	54	-	49	-	+	
-) 	50	+		-	+	
-{ 	51	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-	52	-	+	
-} 	53	+		-	+	
-double integer string bool matrix void 	44	-		-	+	
-double integer string bool matrix 	56	-		-	-	
-eps 	59	-		-	+	
-double integer string bool matrix 	27	-	57	-	+	
-identifier 	58	+		-	+	
-, eps 	60	-		-	+	
-eps 	0	+		+	+	
-, 	62	-		-	-	
-eps 	66	-		-	+	
-, 	63	+		-	+	
-double integer string bool matrix 	27	-	64	-	+	
-identifier 	65	+		-	+	
-, eps 	60	-		-	+	
-eps 	0	+		+	+	
-identifier 	73	-		-	-	
-if 	77	-		-	-	
-for 	79	-		-	-	
-matrix double integer string bool matrix 	81	-		-	-	
-return 	84	-		-	-	
-eps 	88	-		-	+	
+double integer string bool void 	52	-		-	-	
+matrix 	61	-		-	+	
+double integer string bool void 	31	-	53	-	+	
+identifier 	54	+		-	+	
+( 	55	+		-	+	
+double integer string bool matrix eps 	70	-	56	-	+	
+) 	57	+		-	+	
+{ 	58	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-	59	-	+	
+} 	60	+		-	+	
+double integer string bool void matrix 	50	-		-	+	
+matrix 	62	+		-	+	
+identifier 	63	+		-	+	
+( 	64	+		-	+	
+double integer string bool matrix eps 	70	-	65	-	+	
+) 	66	+		-	+	
+{ 	67	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-	68	-	+	
+} 	69	+		-	+	
+double integer string bool void matrix 	50	-		-	+	
+double integer string bool matrix 	72	-		-	-	
+eps 	75	-		-	+	
+double integer string bool matrix 	76	-	73	-	+	
 identifier 	74	+		-	+	
-[ ( = 	89	-	75	-	+	
-; 	76	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-		-	+	
-if 	229	-	78	-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-		-	+	
-for 	290	-	80	-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-		-	+	
-matrix double integer string bool matrix 	338	-	82	-	+	
-; 	83	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-		-	+	
-return 	85	+		-	+	
-( identifier literal true false det transp 	351	-	86	-	+	
-; 	87	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-		-	+	
+, eps 	80	-		-	+	
 eps 	0	+		+	+	
-[ 	92	-		-	-	
-( 	93	-		-	-	
-= 	94	-		-	+	
-[ 	95	-		-	+	
-( 	114	-		-	+	
-= 	146	-		-	+	
-[ 	96	-		-	+	
-[ 	104	-	97	-	+	
-= 	98	+		-	+	
-literal identifier 	99	-		-	+	
-literal 	101	-		-	-	
-identifier 	102	-		-	+	
+double integer string bool 	78	-		-	-	
+matrix 	79	-		-	+	
+double integer string bool 	35	-		-	+	
+matrix 	0	+		+	+	
+, 	82	-		-	-	
+eps 	86	-		-	+	
+, 	83	+		-	+	
+double integer string bool 	35	-	84	-	+	
+identifier 	85	+		-	+	
+, eps 	80	-		-	+	
+eps 	0	+		+	+	
+identifier 	93	-		-	-	
+if 	97	-		-	-	
+for 	99	-		-	-	
+matrix double integer string bool 	101	-		-	-	
+return 	104	-		-	-	
+eps 	108	-		-	+	
+identifier 	94	+		-	+	
+[ ( = 	109	-	95	-	+	
+; 	96	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-		-	+	
+if 	249	-	98	-	+	
+identifier if for matrix double integer string bool return eps 	87	-		-	+	
+for 	298	-	100	-	+	
+identifier if for matrix double integer string bool return eps 	87	-		-	+	
+matrix double integer string bool 	346	-	102	-	+	
+; 	103	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-		-	+	
+return 	105	+		-	+	
+( identifier literal true false det transp 	359	-	106	-	+	
+; 	107	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-		-	+	
+eps 	0	+		+	+	
+[ 	112	-		-	-	
+( 	113	-		-	-	
+= 	114	-		-	+	
+[ 	115	-		-	+	
+( 	134	-		-	+	
+= 	166	-		-	+	
+[ 	116	-		-	+	
+[ 	124	-	117	-	+	
+= 	118	+		-	+	
+literal identifier 	119	-		-	+	
+literal 	121	-		-	-	
+identifier 	122	-		-	+	
 literal 	0	+		+	+	
-identifier 	103	+		-	+	
-[ 	104	-		-	+	
-[ 	105	-		-	+	
-[ 	106	+		-	+	
-identifier literal 	110	-	107	-	+	
-, 	108	+		-	+	
-identifier literal 	110	-	109	-	+	
+identifier 	123	+		-	+	
+[ 	124	-		-	+	
+[ 	125	-		-	+	
+[ 	126	+		-	+	
+identifier literal 	130	-	127	-	+	
+, 	128	+		-	+	
+identifier literal 	130	-	129	-	+	
 ] 	0	+		+	+	
-identifier 	112	-		-	-	
-literal 	113	-		-	+	
+identifier 	132	-		-	-	
+literal 	133	-		-	+	
 identifier 	0	+		+	+	
 literal 	0	+		+	+	
-( 	115	-		-	+	
-( 	116	+		-	+	
-identifier literal eps 	118	-	117	-	+	
+( 	135	-		-	+	
+( 	136	+		-	+	
+identifier literal eps 	138	-	137	-	+	
 ) 	0	+		+	+	
-identifier literal 	120	-		-	-	
-eps 	122	-		-	+	
-identifier literal 	129	-	121	-	+	
-, eps 	123	-		-	+	
+identifier literal 	140	-		-	-	
+eps 	142	-		-	+	
+identifier literal 	149	-	141	-	+	
+, eps 	143	-		-	+	
 eps 	0	+		+	+	
-, 	125	-		-	-	
-eps 	128	-		-	+	
-, 	126	+		-	+	
-identifier literal 	129	-	127	-	+	
-, eps 	123	-		-	+	
+, 	145	-		-	-	
+eps 	148	-		-	+	
+, 	146	+		-	+	
+identifier literal 	149	-	147	-	+	
+, eps 	143	-		-	+	
 eps 	0	+		+	+	
-identifier 	131	-		-	-	
-literal 	133	-		-	+	
-identifier 	132	+		-	+	
-[ ( eps 	134	-		-	+	
+identifier 	151	-		-	-	
+literal 	153	-		-	+	
+identifier 	152	+		-	+	
+[ ( eps 	154	-		-	+	
 literal 	0	+		+	+	
-[ 	137	-		-	-	
-( 	138	-		-	-	
-eps 	139	-		-	+	
-[ 	140	-		-	+	
-( 	114	-		-	+	
+[ 	157	-		-	-	
+( 	158	-		-	-	
+eps 	159	-		-	+	
+[ 	160	-		-	+	
+( 	134	-		-	+	
 eps 	0	+		+	+	
-[ 	141	-		-	+	
-[ 	142	+		-	+	
-identifier literal 	110	-	143	-	+	
-, 	144	+		-	+	
-identifier literal 	110	-	145	-	+	
+[ 	161	-		-	+	
+[ 	162	+		-	+	
+identifier literal 	130	-	163	-	+	
+, 	164	+		-	+	
+identifier literal 	130	-	165	-	+	
 ] 	0	+		+	+	
-= 	147	-		-	+	
-= 	148	+		-	+	
-( identifier literal true false det transp 	149	-		-	+	
-( identifier literal true false 	152	-		-	-	
-det 	153	-		-	-	
-transp 	154	-		-	+	
-( identifier literal true false 	155	-		-	+	
-det 	193	-		-	+	
-transp 	198	-		-	+	
-( identifier literal true false 	156	-		-	+	
-( identifier literal true false 	158	-	157	-	+	
-* / + - % eps 	177	-		-	+	
-( 	163	-		-	-	
-identifier 	166	-		-	-	
-literal 	168	-		-	-	
-true 	169	-		-	-	
-false 	170	-		-	+	
-( 	164	+		-	+	
-( identifier literal true false 	155	-	165	-	+	
+= 	167	-		-	+	
+= 	168	+		-	+	
+( identifier literal true false det transp 	169	-		-	+	
+( identifier literal true false 	172	-		-	-	
+det 	173	-		-	-	
+transp 	174	-		-	+	
+( identifier literal true false 	175	-		-	+	
+det 	213	-		-	+	
+transp 	218	-		-	+	
+( identifier literal true false 	176	-		-	+	
+( identifier literal true false 	178	-	177	-	+	
+* / + - % eps 	197	-		-	+	
+( 	183	-		-	-	
+identifier 	186	-		-	-	
+literal 	188	-		-	-	
+true 	189	-		-	-	
+false 	190	-		-	+	
+( 	184	+		-	+	
+( identifier literal true false 	175	-	185	-	+	
 ) 	0	+		+	+	
-identifier 	167	+		-	+	
-[ ( eps 	171	-		-	+	
+identifier 	187	+		-	+	
+[ ( eps 	191	-		-	+	
 literal 	0	+		+	+	
 true 	0	+		+	+	
 false 	0	+		+	+	
-[ 	174	-		-	-	
-( 	175	-		-	-	
-eps 	176	-		-	+	
-[ 	140	-		-	+	
-( 	114	-		-	+	
+[ 	194	-		-	-	
+( 	195	-		-	-	
+eps 	196	-		-	+	
+[ 	160	-		-	+	
+( 	134	-		-	+	
 eps 	0	+		+	+	
-* / + - % 	179	-		-	-	
-eps 	182	-		-	+	
-* / + - % 	183	-	180	-	+	
-( identifier literal true false 	158	-	181	-	+	
-* / + - % eps 	177	-		-	+	
+* / + - % 	199	-		-	-	
+eps 	202	-		-	+	
+* / + - % 	203	-	200	-	+	
+( identifier literal true false 	178	-	201	-	+	
+* / + - % eps 	197	-		-	+	
 eps 	0	+		+	+	
-* 	188	-		-	-	
-/ 	189	-		-	-	
-+ 	190	-		-	-	
-- 	191	-		-	-	
-% 	192	-		-	+	
+* 	208	-		-	-	
+/ 	209	-		-	-	
++ 	210	-		-	-	
+- 	211	-		-	-	
+% 	212	-		-	+	
 * 	0	+		+	+	
 / 	0	+		+	+	
 + 	0	+		+	+	
 - 	0	+		+	+	
 % 	0	+		+	+	
-det 	194	-		-	+	
-det 	195	+		-	+	
-( 	196	+		-	+	
-{ identifier 	203	-	197	-	+	
+det 	214	-		-	+	
+det 	215	+		-	+	
+( 	216	+		-	+	
+{ identifier 	223	-	217	-	+	
 ) 	0	+		+	+	
-transp 	199	-		-	+	
-transp 	200	+		-	+	
-( 	201	+		-	+	
-{ identifier 	203	-	202	-	+	
+transp 	219	-		-	+	
+transp 	220	+		-	+	
+( 	221	+		-	+	
+{ identifier 	223	-	222	-	+	
 ) 	0	+		+	+	
-{ 	205	-		-	-	
-identifier 	209	-		-	+	
-{ 	206	+		-	+	
-{ eps 	210	-	207	-	+	
-, eps 	223	-	208	-	+	
+{ 	225	-		-	-	
+identifier 	229	-		-	+	
+{ 	226	+		-	+	
+{ eps 	230	-	227	-	+	
+, eps 	243	-	228	-	+	
 } 	0	+		+	+	
 identifier 	0	+		+	+	
-{ 	212	-		-	-	
-eps 	216	-		-	+	
-{ 	213	+		-	+	
-identifier literal 	110	-	214	-	+	
-, eps 	217	-	215	-	+	
+{ 	232	-		-	-	
+eps 	236	-		-	+	
+{ 	233	+		-	+	
+identifier literal 	130	-	234	-	+	
+, eps 	237	-	235	-	+	
 } 	0	+		+	+	
 eps 	0	+		+	+	
-, 	219	-		-	-	
-eps 	222	-		-	+	
-, 	220	+		-	+	
-identifier literal 	110	-	221	-	+	
-, eps 	217	-		-	+	
+, 	239	-		-	-	
+eps 	242	-		-	+	
+, 	240	+		-	+	
+identifier literal 	130	-	241	-	+	
+, eps 	237	-		-	+	
 eps 	0	+		+	+	
-, 	225	-		-	-	
-eps 	228	-		-	+	
-, 	226	+		-	+	
-{ eps 	210	-	227	-	+	
-, eps 	223	-		-	+	
+, 	245	-		-	-	
+eps 	248	-		-	+	
+, 	246	+		-	+	
+{ eps 	230	-	247	-	+	
+, eps 	243	-		-	+	
 eps 	0	+		+	+	
-if 	230	-		-	+	
-if 	231	+		-	+	
-( 	232	+		-	+	
-( identifier literal true false ! ( 	238	-	233	-	+	
-) 	234	+		-	+	
-{ 	235	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-	236	-	+	
-} 	237	+		-	+	
-else eps 	283	-		-	+	
-( identifier literal true false ! ( 	239	-		-	+	
-( identifier literal true false ! ( 	241	-	240	-	+	
-|| eps 	244	-		-	+	
-( identifier literal true false ! ( 	242	-		-	+	
-( identifier literal true false ! ( 	250	-	243	-	+	
-&& eps 	260	-		-	+	
-|| 	246	-		-	-	
-eps 	249	-		-	+	
-|| 	247	+		-	+	
-( identifier literal true false ! ( 	241	-	248	-	+	
-|| eps 	244	-		-	+	
+if 	250	-		-	+	
+if 	251	+		-	+	
+( 	252	+		-	+	
+( identifier literal true false 	258	-	253	-	+	
+) 	254	+		-	+	
+{ 	255	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-	256	-	+	
+} 	257	+		-	+	
+else eps 	291	-		-	+	
+( identifier literal true false 	259	-		-	+	
+( identifier literal true false 	260	-		-	+	
+( identifier literal true false 	261	-		-	+	
+( identifier literal true false 	263	-	262	-	+	
+&& || eps 	266	-		-	+	
+( identifier literal true false 	264	-		-	+	
+( identifier literal true false 	175	-	265	-	+	
+< > == != <= >= 	272	-		-	+	
+&& || 	268	-		-	-	
+eps 	271	-		-	+	
+&& || 	287	-	269	-	+	
+( identifier literal true false 	263	-	270	-	+	
+&& || eps 	266	-		-	+	
 eps 	0	+		+	+	
-( identifier literal true false 	253	-		-	-	
-! 	255	-		-	-	
-( 	257	-		-	+	
-( identifier literal true false 	155	-	254	-	+	
-< > == != <= >= eps 	266	-		-	+	
-! 	256	+		-	+	
-( identifier literal true false 	155	-		-	+	
-( 	258	+		-	+	
-( identifier literal true false ! ( 	238	-	259	-	+	
-) 	0	+		+	+	
-&& 	262	-		-	-	
-eps 	265	-		-	+	
-&& 	263	+		-	+	
-( identifier literal true false ! ( 	250	-	264	-	+	
-&& eps 	260	-		-	+	
-eps 	0	+		+	+	
-< > == != <= >= 	268	-		-	-	
-eps 	270	-		-	+	
-< > == != <= >= 	271	-	269	-	+	
-( identifier literal true false 	155	-		-	+	
-eps 	0	+		+	+	
-< 	277	-		-	-	
-> 	278	-		-	-	
-== 	279	-		-	-	
-!= 	280	-		-	-	
-<= 	281	-		-	-	
->= 	282	-		-	+	
+< > == != <= >= 	273	-		-	+	
+< > == != <= >= 	275	-	274	-	+	
+( identifier literal true false 	175	-		-	+	
+< 	281	-		-	-	
+> 	282	-		-	-	
+== 	283	-		-	-	
+!= 	284	-		-	-	
+<= 	285	-		-	-	
+>= 	286	-		-	+	
 < 	0	+		+	+	
 > 	0	+		+	+	
 == 	0	+		+	+	
 != 	0	+		+	+	
 <= 	0	+		+	+	
 >= 	0	+		+	+	
-else 	285	-		-	-	
-eps 	289	-		-	+	
-else 	286	+		-	+	
-{ 	287	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-	288	-	+	
+&& 	289	-		-	-	
+|| 	290	-		-	+	
+&& 	0	+		+	+	
+|| 	0	+		+	+	
+else 	293	-		-	-	
+eps 	297	-		-	+	
+else 	294	+		-	+	
+{ 	295	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-	296	-	+	
 } 	0	+		+	+	
 eps 	0	+		+	+	
-for 	291	-		-	+	
-for 	292	+		-	+	
-( 	293	+		-	+	
-identifier eps 	302	-	294	-	+	
-; 	295	+		-	+	
-( identifier literal true false ! ( eps 	315	-	296	-	+	
-; 	297	+		-	+	
-identifier eps 	326	-	298	-	+	
-) 	299	+		-	+	
-{ 	300	+		-	+	
-identifier if for matrix double integer string bool matrix return eps 	67	-	301	-	+	
+for 	299	-		-	+	
+for 	300	+		-	+	
+( 	301	+		-	+	
+identifier eps 	310	-	302	-	+	
+; 	303	+		-	+	
+( identifier literal true false eps 	323	-	304	-	+	
+; 	305	+		-	+	
+identifier eps 	334	-	306	-	+	
+) 	307	+		-	+	
+{ 	308	+		-	+	
+identifier if for matrix double integer string bool return eps 	87	-	309	-	+	
 } 	0	+		+	+	
-identifier 	304	-		-	-	
-eps 	307	-		-	+	
-identifier 	305	+		-	+	
-= 	146	-	306	-	+	
-, eps 	308	-		-	+	
+identifier 	312	-		-	-	
+eps 	315	-		-	+	
+identifier 	313	+		-	+	
+= 	166	-	314	-	+	
+, eps 	316	-		-	+	
 eps 	0	+		+	+	
-, 	310	-		-	-	
-eps 	314	-		-	+	
-, 	311	+		-	+	
-identifier 	312	+		-	+	
-= 	146	-	313	-	+	
-, eps 	308	-		-	+	
+, 	318	-		-	-	
+eps 	322	-		-	+	
+, 	319	+		-	+	
+identifier 	320	+		-	+	
+= 	166	-	321	-	+	
+, eps 	316	-		-	+	
 eps 	0	+		+	+	
-( identifier literal true false ! ( 	317	-		-	-	
-eps 	319	-		-	+	
-( identifier literal true false ! ( 	238	-	318	-	+	
-, eps 	320	-		-	+	
-eps 	0	+		+	+	
-, 	322	-		-	-	
-eps 	325	-		-	+	
-, 	323	+		-	+	
-( identifier literal true false ! ( 	238	-	3
+( identifier literal true false 	325	-		-	-	
+eps 	327	-		-	+	
+( identifier literal true false

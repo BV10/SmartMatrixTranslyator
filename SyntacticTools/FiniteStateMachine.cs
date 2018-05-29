@@ -30,6 +30,11 @@ namespace SyntacticTools
         // error description
         public Error ErrorSyntax { get; private set; }
 
+        //expected symbols for alternative rules
+        public List<string> ExpectedSymbolsForRules { get; private set; } = new List<string>();
+
+       
+
         //----------------------------------------------------------------------------------
 
         public FiniteStateMachine(StreamReader streamReader, string startNotTerminal)
@@ -53,7 +58,7 @@ namespace SyntacticTools
                 if (!isCorrectLexem && currentRecordTable.Error) // not correct and error
                 {
                     // add error
-                    ErrorSyntax = new Error("Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
+                    ErrorSyntax = new Error("Syntax error - Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
                     ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
 
                     CurrentStatePosition = 0;
@@ -208,8 +213,7 @@ namespace SyntacticTools
             NumericRules(Grammar);
 
             //// fill machine
-
-            //Stack<int> stackStates = new Stack<int>();
+           
             int quantCheckAlterRules = 0;
             for (int iterGram = 0; iterGram < Grammar.Count; iterGram++)
             {
@@ -234,6 +238,17 @@ namespace SyntacticTools
                 });
             }
            
+        }
+
+        public void SaveRuleAndExpectedSymbols(string pathFile)
+        {
+            using (StreamWriter streamWriter = new StreamWriter(File.Create(pathFile)))
+            {
+                ExpectedSymbolsForRules.ForEach((str) =>
+                {
+                    streamWriter.WriteLine(str);
+                });
+            }
         }
 
         public void SaveTableParse(string pathFile)
@@ -352,9 +367,13 @@ namespace SyntacticTools
 
         // return quantity left altern rules
         private int AnalysLeftAlternativeParts(Rule rule, List<Rule> grammars)
-        {
+        {          
+
             // seek alternative rules
             List<Rule> alternativeRules = SeekAlterantiveRules(rule.LeftPartRule.Name, grammars);
+
+            // list string for alternative rules
+            List<string> expectedSymbols = new List<string>();
 
             // add rules in machine
             for (int i = 0; i < alternativeRules.Count; i++)
@@ -376,7 +395,21 @@ namespace SyntacticTools
                 });
                 if (i == alternativeRules.Count - 1) // last alternative rule error in true
                     TableParseLL1[TableParseLL1.Count - 1].Error = true;
-            }
+
+                // save expected symbols for rules
+                ExpectedSymbolsForRules.Add(alternativeRules[0].LeftPartRule.Name + " --- " +
+                    string.Join(", ",TableParseLL1[TableParseLL1.Count-1].ExpectedLexems));
+
+                // check expected lexem
+                foreach (var lexem in TableParseLL1[TableParseLL1.Count - 1].ExpectedLexems)
+                {
+                    // have similar lexem
+                    if (expectedSymbols.Find((match) => match.Equals(lexem)) != null)
+                        throw new BuildFSMException("Not LL1. " + "In rule - "+ alternativeRules[0].LeftPartRule.Name);
+                    expectedSymbols.Add(lexem);
+                }                              
+                
+            }                        
 
             return alternativeRules.Count;
         }

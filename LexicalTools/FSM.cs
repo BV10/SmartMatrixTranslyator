@@ -557,14 +557,14 @@ NextStates = new int[]{1, 1, 1, (int) LexemClass.KeyWord}
                 DescriptState=69,
                 InChars=new string[]{"&", ""},
 
-                NextStates = new int[]{(int) LexemClass.Operations, Error_State}
+                NextStates = new int[]{75, Error_State}
             },
             new State
             {
                 DescriptState=70,
                 InChars=new string[]{"|", ""},
 
-                NextStates = new int[]{(int) LexemClass.Operations, Error_State}
+                NextStates = new int[]{75, Error_State}
             },
             new State
             {

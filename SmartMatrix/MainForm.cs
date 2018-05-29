@@ -105,10 +105,19 @@ namespace SmartMatrix
             {
                 return;
             }
-                       
 
-            SyntacticAnalyzator syntacticAnalyzator = new SyntacticAnalyzator(listLexem,
+            SyntacticAnalyzator syntacticAnalyzator;
+            try
+            {
+                syntacticAnalyzator = new SyntacticAnalyzator(listLexem,
                 new FiniteStateMachine(new StreamReader(File.OpenRead(directResources + "\\grammar.txt")), "Program"));
+            }
+            catch(Exception exception)
+            {
+                listBoxErrors.Items.Add(exception);
+                return;
+            }
+            syntacticAnalyzator.FiniteStateMachin.SaveRuleAndExpectedSymbols(directResources + "\\RuleAndExpectedSymbol.txt");
             syntacticAnalyzator.FiniteStateMachin.SaveNumericGrammar(directResources + "\\NumericGrammar.txt");
             syntacticAnalyzator.FiniteStateMachin.SaveTableParse(directResources + "\\TableParseLL1.txt");
             if(!syntacticAnalyzator.SyntaxAnalyze())

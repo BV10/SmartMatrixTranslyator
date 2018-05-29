@@ -1,0 +1,111 @@
+PROGRAM --- double, integer, string, bool, matrix, void
+DECLARE_FUNC --- double, integer, string, bool
+DECLARE_FUNC --- matrix
+DECLARE_FUNC --- void
+DECLARE_AFTER_VOID --- identifier
+DECLARE_AFTER_VOID --- main
+TYPE --- double, integer, string, bool
+TYPE --- void
+SIMPLETYPE --- double
+SIMPLETYPE --- integer
+SIMPLETYPE --- string
+SIMPLETYPE --- bool
+MAIN --- main
+FUNCTION --- double, integer, string, bool, void
+FUNCTION --- matrix
+LISTPARAM --- double, integer, string, bool, matrix
+LISTPARAM --- eps
+TYPE_PARAM --- double, integer, string, bool
+TYPE_PARAM --- matrix
+NEXT_PARAM --- ,
+NEXT_PARAM --- eps
+CODE --- identifier
+CODE --- if
+CODE --- for
+CODE --- matrix, double, integer, string, bool
+CODE --- return
+CODE --- eps
+CONTEXT_IDENTIFIER --- [
+CONTEXT_IDENTIFIER --- (
+CONTEXT_IDENTIFIER --- =
+ASSIGN_ELEM_MATR --- [
+INIT_ELEM_MATR --- literal
+INIT_ELEM_MATR --- identifier
+ACCESS_ELEM_MATR --- [
+DIGIT --- identifier
+DIGIT --- literal
+FUNC_CALL_PARAMS --- (
+PASSED_ARGS --- identifier, literal
+PASSED_ARGS --- eps
+PAS_ARGS --- ,
+PAS_ARGS --- eps
+ARGUMENT --- identifier
+ARGUMENT --- literal
+COMPOSITE_PART --- [
+COMPOSITE_PART --- (
+COMPOSITE_PART --- eps
+ACCESS_MATR --- [
+ASIGN_USUAL --- =
+EXPRESSION --- (, identifier, literal, true, false
+EXPRESSION --- det
+EXPRESSION --- transp
+ARITHMETIC_EXPRESSION --- (, identifier, literal, true, false
+PART_DIGIT_TERM --- (
+PART_DIGIT_TERM --- identifier
+PART_DIGIT_TERM --- literal
+PART_DIGIT_TERM --- true
+PART_DIGIT_TERM --- false
+AFTER_IDENTIFIER --- [
+AFTER_IDENTIFIER --- (
+AFTER_IDENTIFIER --- eps
+ADD_PART_DIGIT_TERM --- *, /, +, -, %
+ADD_PART_DIGIT_TERM --- eps
+SIGN --- *
+SIGN --- /
+SIGN --- +
+SIGN --- -
+SIGN --- %
+DETERMINANT --- det
+TRANSPONATION --- transp
+INIT_MATR --- {
+INIT_MATR --- identifier
+ROW --- {
+ROW --- eps
+NEXT_DIGITS --- ,
+NEXT_DIGITS --- eps
+NEXT_ROWS --- ,
+NEXT_ROWS --- eps
+IF --- if
+LOGICAL_EXPRESSION --- (, identifier, literal, true, false
+LOGICAL_TERM --- (, identifier, literal, true, false
+PART_LOGTERM --- (, identifier, literal, true, false
+ADD_PART_LOGTERM --- &&, ||
+ADD_PART_LOGTERM --- eps
+OP_COMPARE --- <, >, ==, !=, <=, >=
+COMPARE --- <
+COMPARE --- >
+COMPARE --- ==
+COMPARE --- !=
+COMPARE --- <=
+COMPARE --- >=
+LOG_COMPARE --- &&
+LOG_COMPARE --- ||
+ELSE --- else
+ELSE --- eps
+FOR --- for
+INIT_BLOCK --- identifier
+INIT_BLOCK --- eps
+NEXT_ASIGN_USUAL --- ,
+NEXT_ASIGN_USUAL --- eps
+CONDITION_BLOCK --- (, identifier, literal, true, false
+CONDITION_BLOCK --- eps
+NEXT_LOGICAL_EXPRESSION --- ,
+NEXT_LOGICAL_EXPRESSION --- eps
+ITERATION_BLOCK --- identifier
+ITERATION_BLOCK --- eps
+NEXT_ASIGN_BLOCK --- ,
+NEXT_ASIGN_BLOCK --- eps
+OPERATION_ASIGN --- matrix
+OPERATION_ASIGN --- double, integer, string, bool
+RETURN_FROM_FUNC --- (, identifier, literal, true, false, det, transp
+VALUE --- (, identifier, literal, true, false, det, transp
