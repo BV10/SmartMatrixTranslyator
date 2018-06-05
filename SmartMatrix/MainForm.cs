@@ -120,7 +120,7 @@ namespace SmartMatrix
             syntacticAnalyzator.FiniteStateMachin.SaveRuleAndExpectedSymbols(directResources + "\\RuleAndExpectedSymbol.txt");
             syntacticAnalyzator.FiniteStateMachin.SaveNumericGrammar(directResources + "\\NumericGrammar.txt");
             syntacticAnalyzator.FiniteStateMachin.SaveTableParse(directResources + "\\TableParseLL1.txt");
-            if(!syntacticAnalyzator.SyntaxAnalyze())
+            if(!syntacticAnalyzator.SyntaxAnalyzeAndBuildFours())
             {
                 Error errorSyntax = syntacticAnalyzator.ErrorSyntax;
 

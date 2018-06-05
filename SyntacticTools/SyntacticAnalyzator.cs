@@ -22,16 +22,16 @@ namespace SyntacticTools
         {
             Lexems = lexems;
             FiniteStateMachin = finiteStateMachin;
-            FiniteStateMachin.BuildMachine();
+            FiniteStateMachin.BuildMachine();           
         }
 
-        public bool SyntaxAnalyze()
+        public bool SyntaxAnalyzeAndBuildFours()
         {
             StateMachine stateMachine;
             foreach (var lexem in Lexems)
             {
                 stateMachine = FiniteStateMachin.Handle(lexem);
-                if (stateMachine == StateMachine.Error)
+                if (stateMachine == StateMachine.ErrorSyntax)
                 {
                     ErrorSyntax = FiniteStateMachin.ErrorSyntax;
                     return false;

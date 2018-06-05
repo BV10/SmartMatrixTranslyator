@@ -15,6 +15,7 @@ namespace SyntacticTools
         public int? ToStack { get; set; }
         public bool FromStack { get; set; }
         public bool Error { get; set; }
+        public string NameOfAction { get; set; }
 
         public override string ToString()
         {

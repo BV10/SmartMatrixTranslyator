@@ -9,7 +9,8 @@ namespace SyntacticTools
     public enum StateMachine
     {
         EndProgram = -666,
-        Error = -777,
+        ErrorSyntax = -777,
+        ErrorSemantic = -888,
         Cool = -999
     }
 }

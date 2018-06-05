@@ -12,6 +12,7 @@ namespace SyntacticTools
     public class FiniteStateMachine
     {
 
+
         // read for ll1 from file 
         public StreamReader StreamReader { get; set; }
         public string StartNotTerminal { get; set; }
@@ -33,7 +34,8 @@ namespace SyntacticTools
         //expected symbols for alternative rules
         public List<string> ExpectedSymbolsForRules { get; private set; } = new List<string>();
 
-       
+        // code of fours
+        public List<Four> CodeOfFours { get; private set; } = new List<Four>();
 
         //----------------------------------------------------------------------------------
 
@@ -45,12 +47,12 @@ namespace SyntacticTools
 
         public StateMachine Handle(Lexem lexem)
         {
- eps:       RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
+            eps: RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
             bool isCorrectLexem;
 
             #region I) go along while not accept rule            
             while (!TableParseLL1[CurrentStatePosition].Accept)
-            {                
+            {
                 // 1 correct lexem
                 isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
@@ -62,7 +64,7 @@ namespace SyntacticTools
                     ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
 
                     CurrentStatePosition = 0;
-                    return StateMachine.Error;
+                    return StateMachine.ErrorSyntax;
                 }
                 if (!isCorrectLexem && !currentRecordTable.Error) // not correct and not error go in alterantive left rule
                 {
@@ -82,11 +84,11 @@ namespace SyntacticTools
                     {
                         CurrentStatePosition = 0;
                         return StateMachine.EndProgram;
-                    }                    
+                    }
                     else // need next state from stack
                     {
-                         currentRecordTable.NextState = StackSavedStates.Pop().Value;
-                    }                   
+                        currentRecordTable.NextState = StackSavedStates.Pop().Value;
+                    }
                 }
 
                 CurrentStatePosition = currentRecordTable.NextState;
@@ -106,7 +108,7 @@ namespace SyntacticTools
                 ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
 
                 CurrentStatePosition = 0;
-                return StateMachine.Error;
+                return StateMachine.ErrorSyntax;
             }
 
             // 3 need from stack
@@ -124,11 +126,20 @@ namespace SyntacticTools
             }
 
             // expected lexem eps, check again
-            if(currentRecordTable.ExpectedLexems.Count == 1 && currentRecordTable.ExpectedLexems[0].Equals("eps"))
+            if (currentRecordTable.ExpectedLexems.Count == 1 && currentRecordTable.ExpectedLexems[0].Equals("eps"))
             {
                 CurrentStatePosition = currentRecordTable.NextState;
                 currentRecordTable = TableParseLL1[CurrentStatePosition];
                 goto eps;
+            }
+
+            // before next state do action 
+
+            if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action
+            {
+                StateMachine stateMachine = Action(TableParseLL1[CurrentStatePosition].NameOfAction);
+                if (stateMachine == StateMachine.ErrorSemantic) 
+                    return StateMachine.ErrorSemantic; // semantic error
             }
 
             CurrentStatePosition = currentRecordTable.NextState;
@@ -136,8 +147,22 @@ namespace SyntacticTools
 
             #endregion
 
+
+
             return StateMachine.Cool;
-        }    
+        }
+
+        private StateMachine Action(string action)
+        {
+            switch (action)
+            {
+                case "A1":
+
+                    break;
+            }
+
+            //return StateMachine.Cool;
+        }
 
         private string ExceptedLexems(List<string> expectedLexems)
         {
@@ -145,17 +170,17 @@ namespace SyntacticTools
 
             stringBuilder.Append("[");
 
-            for (int iterLexem =0; iterLexem < expectedLexems.Count; iterLexem++)
+            for (int iterLexem = 0; iterLexem < expectedLexems.Count; iterLexem++)
             {
-                if(iterLexem == expectedLexems.Count - 1)
+                if (iterLexem == expectedLexems.Count - 1)
                 {
                     stringBuilder.Append(expectedLexems[iterLexem]);
                     break;
-                }                    
+                }
                 stringBuilder.Append(expectedLexems[iterLexem] + ", ");
             }
-           
-            
+
+
             stringBuilder.Append("]");
             return stringBuilder.ToString();
         }
@@ -185,7 +210,7 @@ namespace SyntacticTools
                 else
                     return expectedLexems.Find((match) => match.Equals("eps")) != null;
             }
-            
+
         }
 
         public void BuildMachine()
@@ -213,7 +238,7 @@ namespace SyntacticTools
             NumericRules(Grammar);
 
             //// fill machine
-           
+
             int quantCheckAlterRules = 0;
             for (int iterGram = 0; iterGram < Grammar.Count; iterGram++)
             {
@@ -225,19 +250,26 @@ namespace SyntacticTools
                 quantCheckAlterRules -= (quantCheckAlterRules == 0 ? 0 : 1);
             }
 
-            TableParseLL1.ForEach((RecordTableLL1 rec) => Console.WriteLine(rec));
+            // add actions in table parse
+            AddActionsToTableParse();
+        }
+
+#warning Realize
+        private void AddActionsToTableParse()
+        {
+            //throw new NotImplementedException();
         }
 
         public void SaveNumericGrammar(string pathFile)
         {
-            using(StreamWriter streamWriter = new StreamWriter(File.Create(pathFile)))
+            using (StreamWriter streamWriter = new StreamWriter(File.Create(pathFile)))
             {
-                 Grammar.ForEach((rule) =>
-                {
-                    streamWriter.WriteLine(rule);
-                });
+                Grammar.ForEach((rule) =>
+               {
+                   streamWriter.WriteLine(rule);
+               });
             }
-           
+
         }
 
         public void SaveRuleAndExpectedSymbols(string pathFile)
@@ -288,9 +320,9 @@ namespace SyntacticTools
                     recInTable.ToStack = null;
                 }
 
-                /*При останньому терміналі або при пустому правилі здійснюється вилу-чення
+                /*При останньому терміналі або при пустому правилі здійснюється вилучення
                  * із стеку номера стану*/
-                recInTable.FromStack = isTerminal && iterRightTerms == rightPart.Terms.Length - 1; 
+                recInTable.FromStack = isTerminal && iterRightTerms == rightPart.Terms.Length - 1;
 
                 /*Якщо стан відповідає терміналу, то він так і ставиться. Якщо нетерміналу - 
                  * то направляючі символи нетермінала, а для альтернативних 
@@ -367,7 +399,7 @@ namespace SyntacticTools
 
         // return quantity left altern rules
         private int AnalysLeftAlternativeParts(Rule rule, List<Rule> grammars)
-        {          
+        {
 
             // seek alternative rules
             List<Rule> alternativeRules = SeekAlterantiveRules(rule.LeftPartRule.Name, grammars);
@@ -398,18 +430,18 @@ namespace SyntacticTools
 
                 // save expected symbols for rules
                 ExpectedSymbolsForRules.Add(alternativeRules[0].LeftPartRule.Name + " --- " +
-                    string.Join(", ",TableParseLL1[TableParseLL1.Count-1].ExpectedLexems));
+                    string.Join(", ", TableParseLL1[TableParseLL1.Count - 1].ExpectedLexems));
 
                 // check expected lexem
                 foreach (var lexem in TableParseLL1[TableParseLL1.Count - 1].ExpectedLexems)
                 {
                     // have similar lexem
                     if (expectedSymbols.Find((match) => match.Equals(lexem)) != null)
-                        throw new BuildFSMException("Not LL1. " + "In rule - "+ alternativeRules[0].LeftPartRule.Name);
+                        throw new BuildFSMException("Not LL1. " + "In rule - " + alternativeRules[0].LeftPartRule.Name);
                     expectedSymbols.Add(lexem);
-                }                              
-                
-            }                        
+                }
+
+            }
 
             return alternativeRules.Count;
         }
