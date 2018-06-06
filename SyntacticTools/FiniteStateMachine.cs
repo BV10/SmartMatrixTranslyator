@@ -11,8 +11,6 @@ namespace SyntacticTools
 {
     public class FiniteStateMachine
     {
-
-
         // read for ll1 from file 
         public StreamReader StreamReader { get; set; }
         public string StartNotTerminal { get; set; }
@@ -40,6 +38,8 @@ namespace SyntacticTools
 
         // storage for identifier
         private List<Identifier> LocalIdentifiers { get; set; } = new List<Identifier>();
+        // storage for funcs 
+        private List<Function> Functions { get; set; } = new List<Function>();
 
         //----------------------------------------------------------------------------------
 
@@ -52,15 +52,12 @@ namespace SyntacticTools
         public StateMachine Handle(Lexem lexem)
         {
             eps: RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
-            bool isCorrectLexem;
-            string action = null;
+            bool isCorrectLexem;           
 
             #region I) go along while not accept rule            
             while (!TableParseLL1[CurrentStatePosition].Accept)
             {
-                // action in not terminal save on long distation
-                action = TableParseLL1[CurrentStatePosition].NameOfAction; 
-
+                
                 // 1 correct lexem
                 isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
@@ -143,11 +140,6 @@ namespace SyntacticTools
 
             //---- before next state do action on terminal
 
-            if(action != null) // action contains in not terminal
-            {
-                TableParseLL1[CurrentStatePosition].NameOfAction = action;
-            }
-
             if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action in terminal
             {
                 StateMachine stateMachine = Action(lexem, TableParseLL1[CurrentStatePosition].NameOfAction);
@@ -208,6 +200,10 @@ namespace SyntacticTools
         }
 
         #warning need realize
+        private string typeOfIdent = ""; // for save type 
+
+        
+
         private StateMachine Action(Lexem lexem, string action)
         {
             switch (action)
@@ -218,7 +214,7 @@ namespace SyntacticTools
                     break;
                 // 2) for saved identifiers type
                 case "S2":
-                    LocalIdentifiers.Add(new Identifier() { Type = lexem.Lex });// type of data in
+                    typeOfIdent = lexem.Lex;
                     break;
                 // 3) for saved name identifiers and check on repeated names
                 case "S3":
@@ -231,7 +227,8 @@ namespace SyntacticTools
                     }
                     else // 
                     {
-                        LocalIdentifiers[LocalIdentifiers.Count - 1].Name = lexem.Lex; // save name of ident
+                        LocalIdentifiers.Add(new Identifier()
+                        { Name = lexem.Lex, Type = typeOfIdent });                        
                     }   
                     break;
             }
@@ -247,16 +244,21 @@ namespace SyntacticTools
             TableParseLL1[54].NameOfAction = "S1"; // antry in function
             TableParseLL1[63].NameOfAction = "S1"; // antry in function
 
-            // 2) for saved identifiers type
-            TableParseLL1[72].NameOfAction = "S2"; // in func params
-            TableParseLL1[83].NameOfAction = "S2"; // in func params
-            TableParseLL1[353].NameOfAction = "S2"; // type in local var
-            TableParseLL1[348].NameOfAction = "S2"; // type in matrix var
+            // 2) saved identifiers type       
+            TableParseLL1[39].NameOfAction = "S2";
+            TableParseLL1[40].NameOfAction = "S2"; 
+            TableParseLL1[41].NameOfAction = "S2"; 
+            TableParseLL1[42].NameOfAction = "S2";
+            TableParseLL1[79].NameOfAction = "S2"; 
+            TableParseLL1[348].NameOfAction = "S2"; 
 
-            // 3) for saved name identifiers and check on repeated names
+            // 3) saved name identifiers and identifiers and check on repeated names
             TableParseLL1[350].NameOfAction = "S3"; // ident matrix var
             TableParseLL1[354].NameOfAction = "S3"; // ident any type var
-            TableParseLL1[348].NameOfAction = "S3"; // ident in params func
+            TableParseLL1[73].NameOfAction = "S3"; // ident in params func
+            TableParseLL1[84].NameOfAction = "S3"; // ident in params func
+
+            // 4) 
         }
 
         private string ExceptedLexems(List<string> expectedLexems)

@@ -43,7 +43,9 @@
     <Compile Include="BuildFSMException.cs" />
     <Compile Include="FiniteStateMachine.cs" />
     <Compile Include="Four.cs" />
+    <Compile Include="Function.cs" />
     <Compile Include="Identifier.cs" />
+    <Compile Include="Operand.cs" />
     <Compile Include="RecordTableLL1.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="StatesMachine.cs" />

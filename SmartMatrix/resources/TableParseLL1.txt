@@ -37,10 +37,10 @@ double 	39	-		-	-
 integer 	40	-		-	-	
 string 	41	-		-	-	
 bool 	42	-		-	+	
-double 	0	+		+	+	
-integer 	0	+		+	+	
-string 	0	+		+	+	
-bool 	0	+		+	+	
+double 	0	+		+	+	S2
+integer 	0	+		+	+	S2
+string 	0	+		+	+	S2
+bool 	0	+		+	+	S2
 main 	44	-		-	+	
 main 	45	+		-	+	
 ( 	46	+		-	+	
@@ -70,19 +70,19 @@ identifier if for matrix double integer string bool return eps 	87	-	68	-	+
 double integer string bool void matrix 	50	-		-	+	
 double integer string bool matrix 	72	-		-	-	
 eps 	75	-		-	+	
-double integer string bool matrix 	76	-	73	-	+	S2
-identifier 	74	+		-	+	
+double integer string bool matrix 	76	-	73	-	+	
+identifier 	74	+		-	+	S3
 , eps 	80	-		-	+	
 eps 	0	+		+	+	
 double integer string bool 	78	-		-	-	
 matrix 	79	-		-	+	
 double integer string bool 	35	-		-	+	
-matrix 	0	+		+	+	
+matrix 	0	+		+	+	S2
 , 	82	-		-	-	
 eps 	86	-		-	+	
 , 	83	+		-	+	
-double integer string bool matrix 	76	-	84	-	+	S2
-identifier 	85	+		-	+	
+double integer string bool matrix 	76	-	84	-	+	
+identifier 	85	+		-	+	S3
 , eps 	80	-		-	+	
 eps 	0	+		+	+	
 identifier 	93	-		-	-	
@@ -346,12 +346,12 @@ eps 	345	-		-	+
 eps 	0	+		+	+	
 matrix 	348	-		-	-	
 double integer string bool 	353	-		-	+	
-matrix 	349	+		-	+	S3
+matrix 	349	+		-	+	S2
 [ 	160	-	350	-	+	
 identifier 	351	+		-	+	S3
 = 	352	+		-	+	
 { identifier 	223	-		-	+	
-double integer string bool 	35	-	354	-	+	S2
+double integer string bool 	35	-	354	-	+	
 identifier 	355	+		-	+	S3
 = 	356	+		-	+	
 ( identifier literal true false det transp 	169	-		-	+	
