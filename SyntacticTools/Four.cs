@@ -9,7 +9,7 @@
 
         public override string ToString()
         {
-            return Operation + "  " + FirstOperand + "  " + SecondOperand + "  " + Number;
+            return Operation + ",  " + FirstOperand + ",  " + SecondOperand + ",  " + Number + ";";
         }
     }
 }

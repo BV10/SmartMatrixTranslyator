@@ -90,7 +90,7 @@ namespace SmartMatrix
             {
                 foreach (var lexem in listLexem)
                 {
-                    listBoxLexems.Items.Add(lexem);
+                    //listBoxLexems.Items.Add(lexem);
                     writer.WriteLine(lexem);
                 }
             }
@@ -142,6 +142,12 @@ namespace SmartMatrix
             else
             {
                 this.correctSyntax.Visible = true;
+
+                // generate code
+                foreach (var four in syntacticAnalyzator.FiniteStateMachin.CodeOfFours)
+                {
+                    listBoxLexems.Items.Add(four);
+                }
             }
         }
 

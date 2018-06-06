@@ -33,7 +33,7 @@ namespace SyntacticTools
                 stateMachine = FiniteStateMachin.Handle(lexem);
                 if (stateMachine == StateMachine.ErrorSyntax || stateMachine == StateMachine.ErrorSemantic)
                 {
-                    ErrorSyntax = FiniteStateMachin.ErrorSyntax;
+                    ErrorSyntax = FiniteStateMachin.Error;
                     return false;
                 }
                 else if(stateMachine == StateMachine.EndProgram)

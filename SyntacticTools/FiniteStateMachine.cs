@@ -28,7 +28,7 @@ namespace SyntacticTools
         private Stack<int?> StackSavedStates { get; set; } = new Stack<int?>();
 
         // error description
-        public Error ErrorSyntax { get; private set; }
+        public Error Error { get; private set; }
 
         //expected symbols for alternative rules
         public List<string> ExpectedSymbolsForRules { get; private set; } = new List<string>();
@@ -39,7 +39,21 @@ namespace SyntacticTools
         // storage for identifier
         private List<Identifier> LocalIdentifiers { get; set; } = new List<Identifier>();
         // storage for funcs 
-        private List<Function> Functions { get; set; } = new List<Function>();
+        private List<Function> Functions { get; set; } = new List<Function>()
+        {
+            new Function(){Name = "ReadFile"},
+            new Function(){Name = "IsFileExist"},
+            new Function(){Name = "PrintFile"},
+            new Function(){Name = "CountColumns"},
+            new Function(){Name = "PrintMatrix"},
+            new Function(){Name = "ReadMatrix"},
+            new Function(){Name = "PrintLine"},
+            new Function(){Name = "ReadLine"},
+            new Function(){Name = "CountRows"}
+        };
+
+        
+
 
         //----------------------------------------------------------------------------------
 
@@ -52,12 +66,12 @@ namespace SyntacticTools
         public StateMachine Handle(Lexem lexem)
         {
             eps: RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
-            bool isCorrectLexem;           
+            bool isCorrectLexem;
 
             #region I) go along while not accept rule            
             while (!TableParseLL1[CurrentStatePosition].Accept)
             {
-                
+
                 // 1 correct lexem
                 isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
@@ -65,8 +79,8 @@ namespace SyntacticTools
                 if (!isCorrectLexem && currentRecordTable.Error) // not correct and error
                 {
                     // add error
-                    ErrorSyntax = new Error("Syntax error - Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
-                    ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
+                    Error = new Error("Syntax error - Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
+                    Error.PositionInMultiStr = lexem.PositionInMultiStr;
 
                     CurrentStatePosition = 0;
                     return StateMachine.ErrorSyntax;
@@ -109,8 +123,8 @@ namespace SyntacticTools
             // 2 error lexem
             if (!isCorrectLexem) // not correct and error
             {
-                ErrorSyntax = new Error("Syntax error - Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
-                ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
+                Error = new Error("Syntax error - Expected lexem(s): " + ExceptedLexems(currentRecordTable.ExpectedLexems));
+                Error.PositionInMultiStr = lexem.PositionInMultiStr;
 
                 CurrentStatePosition = 0;
                 return StateMachine.ErrorSyntax;
@@ -133,8 +147,19 @@ namespace SyntacticTools
             // expected lexem eps, check again
             if (currentRecordTable.ExpectedLexems.Count == 1 && currentRecordTable.ExpectedLexems[0].Equals("eps"))
             {
+                if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action in terminal
+                {
+                    foreach (var nameOfAction in TableParseLL1[CurrentStatePosition].NameOfAction)
+                    {
+                        StateMachine stateMachine = Action(lexem, nameOfAction);
+                        if (stateMachine == StateMachine.ErrorSemantic)
+                            return StateMachine.ErrorSemantic; // semantic error
+                    }
+                }
+
                 CurrentStatePosition = currentRecordTable.NextState;
                 currentRecordTable = TableParseLL1[CurrentStatePosition];
+
                 goto eps;
             }
 
@@ -142,9 +167,12 @@ namespace SyntacticTools
 
             if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action in terminal
             {
-                StateMachine stateMachine = Action(lexem, TableParseLL1[CurrentStatePosition].NameOfAction);
-               if (stateMachine == StateMachine.ErrorSemantic) 
-                    return StateMachine.ErrorSemantic; // semantic error
+                foreach (var nameOfAction in TableParseLL1[CurrentStatePosition].NameOfAction)
+                {
+                    StateMachine stateMachine = Action(lexem, nameOfAction);
+                    if (stateMachine == StateMachine.ErrorSemantic)
+                        return StateMachine.ErrorSemantic; // semantic error
+                }               
             }
             //------
 
@@ -199,10 +227,27 @@ namespace SyntacticTools
             AddActionsToTableParse();
         }
 
-        #warning need realize
-        private string typeOfIdent = ""; // for save type 
+#warning need realize
+        #region Fields for action in table parse
 
-        
+        //stack for sign operations
+        private Stack<int> StackSignOperations { get; set; } = new Stack<int>();
+        private Stack<Lexem> DownStackLexems { get; set; } = new Stack<Lexem>();
+        private Stack<Lexem> StackOperations { get; set; } = new Stack<Lexem>();
+        private Lexem identifierOnLongDistance = new Lexem();
+
+        private int deepOfArithExpression = 0;
+        //var for work with stack
+        private int i = 0, n = 0;
+
+        private string typeOfIdent = ""; // for save type         
+        private bool inDeclareFunc = false; // for params identifier position in declare func
+        private bool inCallFunc = false; // ident call func
+
+        // identifier for long distance transfer        
+        private Lexem currentIdentifier = new Lexem();
+
+        #endregion
 
         private StateMachine Action(Lexem lexem, string action)
         {
@@ -218,47 +263,210 @@ namespace SyntacticTools
                     break;
                 // 3) for saved name identifiers and check on repeated names
                 case "S3":
-                    // repeated identifier - error semantic
-                    if (LocalIdentifiers.Find(match => match.Name == lexem.Lex) != null)
+                    if (inDeclareFunc)
                     {
-                        ErrorSyntax = new Error("Semantic error - Such identifier " + "\"" + lexem.Lex +"\"" +" already exist: ");
-                        ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
+                        Functions[Functions.Count - 1].ParamsList.Add(
+                            new Function.Param() { Type = typeOfIdent, Name = lexem.Lex });
+                    }
+                    else
+                    {
+                        if (LocalIdentifiers.Find(match => match.Name == lexem.Lex) != null)
+                        {
+                            Error = new Error("Semantic error - such identifier  <" + lexem.Lex + "\">  already exist");
+                            Error.PositionInMultiStr = lexem.PositionInMultiStr;
+                            return StateMachine.ErrorSemantic;
+                        }
+                        else
+                        {
+                            LocalIdentifiers.Add(new Identifier()
+                            { Name = lexem.Lex, Type = typeOfIdent });
+
+                        }
+
+                    }
+
+                    break;
+                // 4) add name function and get return type from var typeOfIdent
+                case "S4":
+                    // such func already exist
+                    if (Functions.Find(match => match.Name == lexem.Lex) != null)
+                    {
+                        Error = new Error("Semantic error - such name func  <" + lexem.Lex + ">  already exist");
+                        Error.PositionInMultiStr = lexem.PositionInMultiStr;
                         return StateMachine.ErrorSemantic;
                     }
-                    else // 
+                    else
                     {
-                        LocalIdentifiers.Add(new Identifier()
-                        { Name = lexem.Lex, Type = typeOfIdent });                        
-                    }   
+                        Functions.Add(new Function()
+                        {
+                            Name = lexem.Lex,
+                            ReturnType = typeOfIdent,
+                            ParamsList = new List<Function.Param>()
+                        });
+                    }
+                    break;
+                // 5) we are in declare func,  add flag
+                case "S5":
+                    inDeclareFunc = true;
+                    break;
+                // 6) we leave declare func,  remove flag
+                case "S6":
+                    inDeclareFunc = false;
+                    break;
+                // 7) usage identifier
+                case "S7":
+                    currentIdentifier = lexem;
+                    break;
+                // 8) check identifier on declaration in table ident
+                case "S8":
+                    if (LocalIdentifiers.Find(match => match.Name == currentIdentifier.Lex) == null)
+                    {
+                        Error = new Error("Semantic error - such identifier  <" + currentIdentifier.Lex + ">  not declare");
+                        Error.PositionInMultiStr = currentIdentifier.PositionInMultiStr;
+                        return StateMachine.ErrorSemantic;
+                    }
+                    break;
+                // 9) check identifier on declaration in table func
+                case "S9":
+                    if (Functions.Find(match => match.Name == currentIdentifier.Lex) == null)
+                    {
+                        Error = new Error("Semantic error - such func  <" + currentIdentifier.Lex + ">  not declare");
+                        Error.PositionInMultiStr = currentIdentifier.PositionInMultiStr;
+                        return StateMachine.ErrorSemantic;
+                    }
+                    break;
+                case "A1":
+                    DownStackLexems.Push(lexem);
+
+                    if(DownStackLexems.Count % 2 == 0)
+                    {
+                        CodeOfFours.Add(new Four()
+                        {
+                            SecondOperand = DownStackLexems.Pop().Lex,
+                            FirstOperand = DownStackLexems.Pop().Lex,
+                            Number = n.ToString(),
+                            Operation = StackOperations.Pop().Lex
+                        });
+                        DownStackLexems.Push(new Lexem() { Lex = n.ToString() });
+                        n++; // next fours
+                    }                 
+                   
+                    break;
+                case "A2":
+                    StackOperations.Push(lexem);
+                    break;
+                case "A3":
+                    identifierOnLongDistance = lexem;
+                    break;
+                case "A4":
+                    CodeOfFours.Add(new Four()
+                    {
+                        FirstOperand = identifierOnLongDistance.Lex,
+                        Operation = "=",
+                        SecondOperand = DownStackLexems.Pop().Lex,
+                        Number = n.ToString()
+                    });
+                    n++;
+                    break;
+                case "A5":
+                    deepOfArithExpression++;
                     break;
             }
 
             return StateMachine.Cool;
         }
 
-        #warning Realize
+#warning Realize
         private void AddActionsToTableParse()
         {
+            #region Semantic actions
             // 1) create list identifier
-            TableParseLL1[47].NameOfAction = "S1"; // entry in main
-            TableParseLL1[54].NameOfAction = "S1"; // antry in function
-            TableParseLL1[63].NameOfAction = "S1"; // antry in function
+            TableParseLL1[47].NameOfAction.Add("S1"); // entry in main
+            TableParseLL1[54].NameOfAction.Add("S1"); // antry in function
+            TableParseLL1[63].NameOfAction.Add("S1"); // antry in function
 
-            // 2) saved identifiers type       
-            TableParseLL1[39].NameOfAction = "S2";
-            TableParseLL1[40].NameOfAction = "S2"; 
-            TableParseLL1[41].NameOfAction = "S2"; 
-            TableParseLL1[42].NameOfAction = "S2";
-            TableParseLL1[79].NameOfAction = "S2"; 
-            TableParseLL1[348].NameOfAction = "S2"; 
+            // 2) saved  type       
+            TableParseLL1[13].NameOfAction.Add("S2");
+            TableParseLL1[20].NameOfAction.Add("S2");
+            TableParseLL1[39].NameOfAction.Add("S2");
+            TableParseLL1[40].NameOfAction.Add("S2");
+            TableParseLL1[41].NameOfAction.Add("S2");
+            TableParseLL1[42].NameOfAction.Add("S2");
+            TableParseLL1[79].NameOfAction.Add("S2");
+            TableParseLL1[348].NameOfAction.Add("S2");
 
             // 3) saved name identifiers and identifiers and check on repeated names
-            TableParseLL1[350].NameOfAction = "S3"; // ident matrix var
-            TableParseLL1[354].NameOfAction = "S3"; // ident any type var
-            TableParseLL1[73].NameOfAction = "S3"; // ident in params func
-            TableParseLL1[84].NameOfAction = "S3"; // ident in params func
+            TableParseLL1[350].NameOfAction.Add("S3"); // ident matrix var
+            TableParseLL1[354].NameOfAction.Add("S3"); // ident any type var
+            TableParseLL1[73].NameOfAction.Add("S3"); // ident in params func
+            TableParseLL1[84].NameOfAction.Add("S3"); // ident in params func
 
-            // 4) 
+            // 4) add function type and func
+            TableParseLL1[7].NameOfAction.Add("S4");
+            TableParseLL1[14].NameOfAction.Add("S4");
+            TableParseLL1[24].NameOfAction.Add("S4");
+            TableParseLL1[44].NameOfAction.Add("S4");
+
+            // 5) we are in declare func,  add flag
+            TableParseLL1[8].NameOfAction.Add("S5");
+            TableParseLL1[15].NameOfAction.Add("S5");
+            TableParseLL1[25].NameOfAction.Add("S5");
+
+            // 6) we leave declare func,  remove flag
+            TableParseLL1[10].NameOfAction.Add("S6");
+            TableParseLL1[17].NameOfAction.Add("S6");
+            TableParseLL1[27].NameOfAction.Add("S6");
+
+            // 7) usage identifier
+            TableParseLL1[93].NameOfAction.Add("S7");
+            TableParseLL1[186].NameOfAction.Add("S7");
+            TableParseLL1[229].NameOfAction.Add("S7");
+            TableParseLL1[312].NameOfAction.Add("S7");
+            TableParseLL1[319].NameOfAction.Add("S7");
+            TableParseLL1[336].NameOfAction.Add("S7");
+            TableParseLL1[151].NameOfAction.Add("S7");
+            // 8) check identifier on declaration in table ident
+            TableParseLL1[125].NameOfAction.Add("S8");
+            TableParseLL1[161].NameOfAction.Add("S8");
+            TableParseLL1[159].NameOfAction.Add("S8");
+            TableParseLL1[167].NameOfAction.Add("S8");
+            TableParseLL1[196].NameOfAction.Add("S8");
+            // 9) check identifier on declaration in table func
+            TableParseLL1[135].NameOfAction.Add("S9");
+            #endregion
+
+            #region Fours actions
+            //--- actions for arithmetic expression            
+
+            // add first operand to stack lexem
+            TableParseLL1[186].NameOfAction.Add("A1");
+            TableParseLL1[188].NameOfAction.Add("A1");
+            TableParseLL1[189].NameOfAction.Add("A1");
+            TableParseLL1[190].NameOfAction.Add("A1");
+
+            //// save sign operation
+            TableParseLL1[208].NameOfAction.Add("A2");
+            TableParseLL1[209].NameOfAction.Add("A2");
+            TableParseLL1[210].NameOfAction.Add("A2");
+            TableParseLL1[211].NameOfAction.Add("A2");
+            TableParseLL1[212].NameOfAction.Add("A2");
+
+            // in deep of arithmetic expression
+            TableParseLL1[183].NameOfAction.Add("A5");
+
+            //----
+
+            //---operation assign
+
+            // first ident
+            TableParseLL1[350].NameOfAction.Add("A3");
+            TableParseLL1[354].NameOfAction.Add("A3");
+
+            // end of expression
+            TableParseLL1[196].NameOfAction.Add("A4");
+            TableParseLL1[202].NameOfAction.Add("A4");
+            //----
+            #endregion
         }
 
         private string ExceptedLexems(List<string> expectedLexems)
@@ -308,7 +516,7 @@ namespace SyntacticTools
                     return expectedLexems.Find((match) => match.Equals("eps")) != null;
             }
 
-        }       
+        }
 
         public void SaveNumericGrammar(string pathFile)
         {
@@ -341,7 +549,7 @@ namespace SyntacticTools
                 {
                     streamWriter.WriteLine(rule);
                 });
-            }                
+            }
         }
 
         private void AnalysRightPart(Rule rule, List<Rule> grammars)
