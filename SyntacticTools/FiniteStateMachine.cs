@@ -19,6 +19,7 @@ namespace SyntacticTools
 
         // states of machine
         public List<RecordTableLL1> TableParseLL1 { get; private set; } = new List<RecordTableLL1>();
+
         // grammar 
         public List<Rule> Grammar { get; private set; } = new List<Rule>();
 
@@ -37,6 +38,9 @@ namespace SyntacticTools
         // code of fours
         public List<Four> CodeOfFours { get; private set; } = new List<Four>();
 
+        // storage for identifier
+        private List<Identifier> LocalIdentifiers { get; set; } = new List<Identifier>();
+
         //----------------------------------------------------------------------------------
 
         public FiniteStateMachine(StreamReader streamReader, string startNotTerminal)
@@ -49,10 +53,14 @@ namespace SyntacticTools
         {
             eps: RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
             bool isCorrectLexem;
+            string action = null;
 
             #region I) go along while not accept rule            
             while (!TableParseLL1[CurrentStatePosition].Accept)
             {
+                // action in not terminal save on long distation
+                action = TableParseLL1[CurrentStatePosition].NameOfAction; 
+
                 // 1 correct lexem
                 isCorrectLexem = CheckLexem(lexem, CurrentStatePosition);
 
@@ -133,14 +141,20 @@ namespace SyntacticTools
                 goto eps;
             }
 
-            // before next state do action 
+            //---- before next state do action on terminal
 
-            if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action
+            if(action != null) // action contains in not terminal
             {
-                StateMachine stateMachine = Action(TableParseLL1[CurrentStatePosition].NameOfAction);
-                if (stateMachine == StateMachine.ErrorSemantic) 
+                TableParseLL1[CurrentStatePosition].NameOfAction = action;
+            }
+
+            if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action in terminal
+            {
+                StateMachine stateMachine = Action(lexem, TableParseLL1[CurrentStatePosition].NameOfAction);
+               if (stateMachine == StateMachine.ErrorSemantic) 
                     return StateMachine.ErrorSemantic; // semantic error
             }
+            //------
 
             CurrentStatePosition = currentRecordTable.NextState;
             currentRecordTable = TableParseLL1[CurrentStatePosition];
@@ -152,16 +166,97 @@ namespace SyntacticTools
             return StateMachine.Cool;
         }
 
-        private StateMachine Action(string action)
+        public void BuildMachine()
+        {
+            // read all rules from file and divide right and left part            
+            while (!StreamReader.EndOfStream)
+            {
+                string[] rule = Regex.Split(StreamReader.ReadLine(), "->");
+                if (rule.Length != 2) // no valid format rule
+                {
+                    throw new BuildFSMException("Not valid format rules");
+                }
+                Grammar.Add(new Rule()
+                {
+                    LeftPartRule = new Rule.LeftPart() { Name = rule[0] },
+                    RightPartRule = new Rule.RightPart() { Terms = rule[1].Split(' ') }
+                });
+            }
+
+            // empty grammars
+            if (Grammar.Count == 0)
+                throw new BuildFSMException("Empty grammar!!!");
+
+            // number rule
+            NumericRules(Grammar);
+
+            //// fill machine
+
+            int quantCheckAlterRules = 0;
+            for (int iterGram = 0; iterGram < Grammar.Count; iterGram++)
+            {
+                if (quantCheckAlterRules == 0) // that's why not go along alternative rules
+                {
+                    quantCheckAlterRules = AnalysLeftAlternativeParts(Grammar[iterGram], Grammar);
+                }
+                AnalysRightPart(Grammar[iterGram], Grammar);
+                quantCheckAlterRules -= (quantCheckAlterRules == 0 ? 0 : 1);
+            }
+
+            // add actions in table parse
+            AddActionsToTableParse();
+        }
+
+        #warning need realize
+        private StateMachine Action(Lexem lexem, string action)
         {
             switch (action)
             {
-                case "A1":
-
+                //1) create list identifier
+                case "S1":
+                    LocalIdentifiers = new List<Identifier>();
+                    break;
+                // 2) for saved identifiers type
+                case "S2":
+                    LocalIdentifiers.Add(new Identifier() { Type = lexem.Lex });// type of data in
+                    break;
+                // 3) for saved name identifiers and check on repeated names
+                case "S3":
+                    // repeated identifier - error semantic
+                    if (LocalIdentifiers.Find(match => match.Name == lexem.Lex) != null)
+                    {
+                        ErrorSyntax = new Error("Semantic error - Such identifier " + "\"" + lexem.Lex +"\"" +" already exist: ");
+                        ErrorSyntax.PositionInMultiStr = lexem.PositionInMultiStr;
+                        return StateMachine.ErrorSemantic;
+                    }
+                    else // 
+                    {
+                        LocalIdentifiers[LocalIdentifiers.Count - 1].Name = lexem.Lex; // save name of ident
+                    }   
                     break;
             }
 
-            //return StateMachine.Cool;
+            return StateMachine.Cool;
+        }
+
+        #warning Realize
+        private void AddActionsToTableParse()
+        {
+            // 1) create list identifier
+            TableParseLL1[47].NameOfAction = "S1"; // entry in main
+            TableParseLL1[54].NameOfAction = "S1"; // antry in function
+            TableParseLL1[63].NameOfAction = "S1"; // antry in function
+
+            // 2) for saved identifiers type
+            TableParseLL1[72].NameOfAction = "S2"; // in func params
+            TableParseLL1[83].NameOfAction = "S2"; // in func params
+            TableParseLL1[353].NameOfAction = "S2"; // type in local var
+            TableParseLL1[348].NameOfAction = "S2"; // type in matrix var
+
+            // 3) for saved name identifiers and check on repeated names
+            TableParseLL1[350].NameOfAction = "S3"; // ident matrix var
+            TableParseLL1[354].NameOfAction = "S3"; // ident any type var
+            TableParseLL1[348].NameOfAction = "S3"; // ident in params func
         }
 
         private string ExceptedLexems(List<string> expectedLexems)
@@ -211,54 +306,7 @@ namespace SyntacticTools
                     return expectedLexems.Find((match) => match.Equals("eps")) != null;
             }
 
-        }
-
-        public void BuildMachine()
-        {
-            // read all rules from file and divide right and left part            
-            while (!StreamReader.EndOfStream)
-            {
-                string[] rule = Regex.Split(StreamReader.ReadLine(), "->");
-                if (rule.Length != 2) // no valid format rule
-                {
-                    throw new BuildFSMException("Not valid format rules");
-                }
-                Grammar.Add(new Rule()
-                {
-                    LeftPartRule = new Rule.LeftPart() { Name = rule[0] },
-                    RightPartRule = new Rule.RightPart() { Terms = rule[1].Split(' ') }
-                });
-            }
-
-            // empty grammars
-            if (Grammar.Count == 0)
-                throw new BuildFSMException("Empty grammar!!!");
-
-            // number rule
-            NumericRules(Grammar);
-
-            //// fill machine
-
-            int quantCheckAlterRules = 0;
-            for (int iterGram = 0; iterGram < Grammar.Count; iterGram++)
-            {
-                if (quantCheckAlterRules == 0) // that's why not go along alternative rules
-                {
-                    quantCheckAlterRules = AnalysLeftAlternativeParts(Grammar[iterGram], Grammar);
-                }
-                AnalysRightPart(Grammar[iterGram], Grammar);
-                quantCheckAlterRules -= (quantCheckAlterRules == 0 ? 0 : 1);
-            }
-
-            // add actions in table parse
-            AddActionsToTableParse();
-        }
-
-#warning Realize
-        private void AddActionsToTableParse()
-        {
-            //throw new NotImplementedException();
-        }
+        }       
 
         public void SaveNumericGrammar(string pathFile)
         {
@@ -285,11 +333,13 @@ namespace SyntacticTools
 
         public void SaveTableParse(string pathFile)
         {
-            StreamWriter streamWriter = new StreamWriter(File.Create(pathFile));
-            TableParseLL1.ForEach((rule) =>
+            using (StreamWriter streamWriter = new StreamWriter(File.Create(pathFile)))
             {
-                streamWriter.WriteLine(rule);
-            });
+                TableParseLL1.ForEach((rule) =>
+                {
+                    streamWriter.WriteLine(rule);
+                });
+            }                
         }
 
         private void AnalysRightPart(Rule rule, List<Rule> grammars)

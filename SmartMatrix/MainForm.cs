@@ -245,7 +245,7 @@ namespace SmartMatrix
         private void MainForm_Load(object sender, EventArgs e)
         {
             // custom load file
-            StreamReader streamReader = new StreamReader(File.Open("Program.txt", FileMode.Open));
+            StreamReader streamReader = new StreamReader(File.Open(directResources + "\\Program.txt", FileMode.Open));
             richTextBoxTextOfProgram.Text = streamReader.ReadToEnd();
             richTextBoxTextOfProgram.TabStop = false;
         }

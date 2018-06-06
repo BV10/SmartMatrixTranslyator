@@ -31,7 +31,7 @@ namespace SyntacticTools
             foreach (var lexem in Lexems)
             {
                 stateMachine = FiniteStateMachin.Handle(lexem);
-                if (stateMachine == StateMachine.ErrorSyntax)
+                if (stateMachine == StateMachine.ErrorSyntax || stateMachine == StateMachine.ErrorSemantic)
                 {
                     ErrorSyntax = FiniteStateMachin.ErrorSyntax;
                     return false;

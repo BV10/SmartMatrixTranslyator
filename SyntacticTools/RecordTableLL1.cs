@@ -39,6 +39,8 @@ namespace SyntacticTools
             stringBuilder.Append((Error ? "+" : "-"));
             stringBuilder.Append("\t");
 
+            stringBuilder.Append(NameOfAction);           
+
             return stringBuilder.ToString();
         }
     }
