@@ -39,7 +39,7 @@ namespace SyntacticTools
             stringBuilder.Append((Error ? "+" : "-"));
             stringBuilder.Append("\t");
 
-            stringBuilder.Append(NameOfAction);           
+            stringBuilder.Append(string.Join(", ", NameOfAction));           
 
             return stringBuilder.ToString();
         }

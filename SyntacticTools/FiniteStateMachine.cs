@@ -235,8 +235,7 @@ namespace SyntacticTools
         private Stack<Lexem> DownStackLexems { get; set; } = new Stack<Lexem>();
         private Stack<Lexem> StackOperations { get; set; } = new Stack<Lexem>();
         private Lexem identifierOnLongDistance = new Lexem();
-
-        private int deepOfArithExpression = 0;
+  
         //var for work with stack
         private int i = 0, n = 0;
 
@@ -247,6 +246,8 @@ namespace SyntacticTools
         // identifier for long distance transfer        
         private Lexem currentIdentifier = new Lexem();
 
+        // one time go in arithmetic expression
+        private bool firstInArithmeticExpress = true;
         #endregion
 
         private StateMachine Action(Lexem lexem, string action)
@@ -335,10 +336,12 @@ namespace SyntacticTools
                         return StateMachine.ErrorSemantic;
                     }
                     break;
+
+                // add first operand to stack lexem
                 case "A1":
                     DownStackLexems.Push(lexem);
-
-                    if(DownStackLexems.Count % 2 == 0)
+                    
+                    if(!firstInArithmeticExpress)
                     {
                         CodeOfFours.Add(new Four()
                         {
@@ -349,15 +352,18 @@ namespace SyntacticTools
                         });
                         DownStackLexems.Push(new Lexem() { Lex = n.ToString() });
                         n++; // next fours
-                    }                 
-                   
+                    }
+                    firstInArithmeticExpress = false;
                     break;
+                //// save sign operation
                 case "A2":
                     StackOperations.Push(lexem);
                     break;
+                // first ident
                 case "A3":
                     identifierOnLongDistance = lexem;
                     break;
+                // end of expression      
                 case "A4":
                     CodeOfFours.Add(new Four()
                     {
@@ -366,10 +372,28 @@ namespace SyntacticTools
                         SecondOperand = DownStackLexems.Pop().Lex,
                         Number = n.ToString()
                     });
+                    firstInArithmeticExpress = true; 
                     n++;
                     break;
+                // first time in arithmetic expression
                 case "A5":
-                    deepOfArithExpression++;
+                    firstInArithmeticExpress = true;
+                    break;
+                // add result from arithmetic express to operand
+                case "A6":
+                    // not last expression
+                    if(DownStackLexems.Count > 1)
+                    {
+                        CodeOfFours.Add(new Four()
+                        {
+                            SecondOperand = DownStackLexems.Pop().Lex,
+                            FirstOperand = DownStackLexems.Pop().Lex,
+                            Number = n.ToString(),
+                            Operation = StackOperations.Pop().Lex
+                        });
+                        DownStackLexems.Push(new Lexem() { Lex = n.ToString() });
+                        n++; // next fours
+                    }
                     break;
             }
 
@@ -436,7 +460,7 @@ namespace SyntacticTools
             #endregion
 
             #region Fours actions
-            //--- actions for arithmetic expression            
+            //1)--- actions for arithmetic expression            
 
             // add first operand to stack lexem
             TableParseLL1[186].NameOfAction.Add("A1");
@@ -451,22 +475,32 @@ namespace SyntacticTools
             TableParseLL1[211].NameOfAction.Add("A2");
             TableParseLL1[212].NameOfAction.Add("A2");
 
-            // in deep of arithmetic expression
+            // first time in arithmetic expression
             TableParseLL1[183].NameOfAction.Add("A5");
+
+            // add result from arithmetic express to operand
+            TableParseLL1[185].NameOfAction.Add("A6");
 
             //----
 
-            //---operation assign
+            //2) ---operation assign
 
             // first ident
             TableParseLL1[350].NameOfAction.Add("A3");
             TableParseLL1[354].NameOfAction.Add("A3");
+            TableParseLL1[93].NameOfAction.Add("A3");
+            
 
-            // end of expression
-            TableParseLL1[196].NameOfAction.Add("A4");
-            TableParseLL1[202].NameOfAction.Add("A4");
-            //----
+            // end of expression            
+            TableParseLL1[102].NameOfAction.Add("A4");
+            TableParseLL1[95].NameOfAction.Add("A4");
+
+            //3) -- logical expression 
+
+            // --
             #endregion
+
+
         }
 
         private string ExceptedLexems(List<string> expectedLexems)
