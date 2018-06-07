@@ -251,7 +251,7 @@ if 	250	-		-	+
 if 	251	+		-	+	
 ( 	252	+		-	+	
 ( identifier literal true false 	258	-	253	-	+	
-) 	254	+		-	+	
+) 	254	+		-	+	B1
 { 	255	+		-	+	
 identifier if for matrix double integer string bool return eps 	87	-	256	-	+	
 } 	257	+		-	+	
@@ -269,7 +269,7 @@ eps 	271	-		-	+
 && || 	287	-	269	-	+	
 ( identifier literal true false 	263	-	270	-	+	
 && || eps 	266	-		-	+	
-eps 	0	+		+	+	
+eps 	0	+		+	+	A8
 < > == != <= >= 	273	-		-	+	
 < > == != <= >= 	275	-	274	-	+	
 ( identifier literal true false 	175	-		-	+	
@@ -279,23 +279,23 @@ eps 	0	+		+	+
 != 	284	-		-	-	
 <= 	285	-		-	-	
 >= 	286	-		-	+	
-< 	0	+		+	+	
-> 	0	+		+	+	
-== 	0	+		+	+	
-!= 	0	+		+	+	
-<= 	0	+		+	+	
->= 	0	+		+	+	
+< 	0	+		+	+	A7
+> 	0	+		+	+	A7
+== 	0	+		+	+	A7
+!= 	0	+		+	+	A7
+<= 	0	+		+	+	A7
+>= 	0	+		+	+	A7
 && 	289	-		-	-	
 || 	290	-		-	+	
 && 	0	+		+	+	
 || 	0	+		+	+	
 else 	293	-		-	-	
 eps 	297	-		-	+	
-else 	294	+		-	+	
+else 	294	+		-	+	B2
 { 	295	+		-	+	
 identifier if for matrix double integer string bool return eps 	87	-	296	-	+	
-} 	0	+		+	+	
-eps 	0	+		+	+	
+} 	0	+		+	+	B3
+eps 	0	+		+	+	B3
 for 	299	-		-	+	
 for 	300	+		-	+	
 ( 	301	+		-	+	
@@ -316,11 +316,11 @@ identifier 	313	+		-	+	S7
 eps 	0	+		+	+	
 , 	318	-		-	-	
 eps 	322	-		-	+	
-, 	319	+		-	+	
+, 	319	+		-	+	A4, C1
 identifier 	320	+		-	+	S7
 = 	166	-	321	-	+	
 , eps 	316	-		-	+	
-eps 	0	+		+	+	
+eps 	0	+		+	+	C1
 ( identifier literal true false 	325	-		-	-	
 eps 	327	-		-	+	
 ( identifier literal true false 	258	-	326	-	+	

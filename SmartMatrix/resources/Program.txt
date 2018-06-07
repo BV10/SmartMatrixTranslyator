@@ -3,7 +3,24 @@ matrix getMatrix1(matrix a);
 
 void main()
 {
-	integer a = 2 - (3 + 5);
+integer i =0;
+	for(i=0; i<12; i=i+1)
+	{}
+
+	if(7*(12+4)<(6-3))
+	{
+		integer a = 2 - (3 + 5);
+	}
+	else
+	{
+		double b =12.3;
+	}
+
+	if(a > 5)
+	{
+		integer qw = 212;
+	}
+
 	a = 132;
 	a = (132 + 5432) * 3; 
 }

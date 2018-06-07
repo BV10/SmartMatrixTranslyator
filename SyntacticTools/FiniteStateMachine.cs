@@ -52,7 +52,7 @@ namespace SyntacticTools
             new Function(){Name = "CountRows"}
         };
 
-        
+
 
 
         //----------------------------------------------------------------------------------
@@ -172,7 +172,7 @@ namespace SyntacticTools
                     StateMachine stateMachine = Action(lexem, nameOfAction);
                     if (stateMachine == StateMachine.ErrorSemantic)
                         return StateMachine.ErrorSemantic; // semantic error
-                }               
+                }
             }
             //------
 
@@ -230,14 +230,17 @@ namespace SyntacticTools
 #warning need realize
         #region Fields for action in table parse
 
-        //stack for sign operations
-        private Stack<int> StackSignOperations { get; set; } = new Stack<int>();
+        //stack for sign operations        
         private Stack<Lexem> DownStackLexems { get; set; } = new Stack<Lexem>();
+        private Stack<Lexem> DownStackArithmeticExpressResults { get; set; } = new Stack<Lexem>();
         private Stack<Lexem> StackOperations { get; set; } = new Stack<Lexem>();
+        private Stack<int> StackOfLabel { get; set; } = new Stack<int>();
+        private Stack<int> UpStackIdentOnLongDistance { get; set; } = new Stack<int>();
+
         private Lexem identifierOnLongDistance = new Lexem();
-  
+
         //var for work with stack
-        private int i = 0, n = 0;
+        private int label = -1, n = 0;
 
         private string typeOfIdent = ""; // for save type         
         private bool inDeclareFunc = false; // for params identifier position in declare func
@@ -340,8 +343,8 @@ namespace SyntacticTools
                 // add first operand to stack lexem
                 case "A1":
                     DownStackLexems.Push(lexem);
-                    
-                    if(!firstInArithmeticExpress)
+
+                    if (!firstInArithmeticExpress)
                     {
                         CodeOfFours.Add(new Four()
                         {
@@ -372,7 +375,8 @@ namespace SyntacticTools
                         SecondOperand = DownStackLexems.Pop().Lex,
                         Number = n.ToString()
                     });
-                    firstInArithmeticExpress = true; 
+                    firstInArithmeticExpress = true;
+                    identifierOnLongDistance.Lex = n.ToString();
                     n++;
                     break;
                 // first time in arithmetic expression
@@ -382,7 +386,7 @@ namespace SyntacticTools
                 // add result from arithmetic express to operand
                 case "A6":
                     // not last expression
-                    if(DownStackLexems.Count > 1)
+                    if (DownStackLexems.Count > 1)
                     {
                         CodeOfFours.Add(new Four()
                         {
@@ -392,9 +396,114 @@ namespace SyntacticTools
                             Operation = StackOperations.Pop().Lex
                         });
                         DownStackLexems.Push(new Lexem() { Lex = n.ToString() });
-                        n++; // next fours
+                        n++; // next fours                       
                     }
                     break;
+                // save logical sign
+                case "A7":
+                    StackOperations.Push(lexem);
+                    // get res of first arithm express
+                    DownStackArithmeticExpressResults.Push(DownStackLexems.Pop());
+                    // save arithmetic express
+                    firstInArithmeticExpress = true;
+                    break;
+                // build four for logical expression
+                case "A8":
+                    // get res of second arithm express
+                    DownStackArithmeticExpressResults.Push(DownStackLexems.Pop());
+                    CodeOfFours.Add(new Four()
+                    {
+                        SecondOperand = DownStackArithmeticExpressResults.Pop().Lex,
+                        FirstOperand = DownStackArithmeticExpressResults.Pop().Lex,
+                        Number = n.ToString(),
+                        Operation = StackOperations.Pop().Lex
+                    });
+                    //end of arithm express
+                    firstInArithmeticExpress = true;
+
+                    // save result of logical express
+                    identifierOnLongDistance.Lex = n.ToString();
+
+                    n++; // next fours
+
+
+                    break;
+                #region constructions "if else"
+                // after logical express in "if"
+                case "B1":
+                    CodeOfFours.Add(new Four()
+                    {
+                        FirstOperand = identifierOnLongDistance.Lex,
+                        Operation = "cmp",
+                        SecondOperand = "true",
+                        Number = n.ToString()
+                    });
+                    n++;// next number of four
+
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "JNE",
+                        FirstOperand = label.ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+                    n++; // next number of four
+
+                    StackOfLabel.Push(label); // save label for goto: else or end code
+
+                    label--; // next label
+                    break;
+                // entry in "else"
+                case "B2":
+                    // jump to end of constuction if else
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "JMP",
+                        FirstOperand = label.ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+
+                    n++;
+
+                    // label for entry in else
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "LABEL",
+                        FirstOperand = StackOfLabel.Pop().ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+
+                    // save label for end construction if else
+                    StackOfLabel.Push(label);
+
+
+                    n++; // next fours
+                    label--; // next label
+
+
+                    break;
+
+                // end of construction "if else"
+                case "B3":
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "LABEL",
+                        SecondOperand = "",
+                        FirstOperand = StackOfLabel.Pop().ToString(),
+                        Number = n.ToString()
+                    });
+
+                    n++; // next four
+                    break;
+                #endregion
+
+                #region Actions "for"
+                case "C1":
+                    UpStackIdentOnLongDistance.Push(int.Parse(identifierOnLongDistance.Lex));
+                    break;
+                    #endregion
             }
 
             return StateMachine.Cool;
@@ -460,7 +569,8 @@ namespace SyntacticTools
             #endregion
 
             #region Fours actions
-            //1)--- actions for arithmetic expression            
+
+            #region //1)--- actions for arithmetic expression            
 
             // add first operand to stack lexem
             TableParseLL1[186].NameOfAction.Add("A1");
@@ -482,25 +592,58 @@ namespace SyntacticTools
             TableParseLL1[185].NameOfAction.Add("A6");
 
             //----
+            #endregion
 
-            //2) ---operation assign
+            #region//2) ---operation assign
 
             // first ident
             TableParseLL1[350].NameOfAction.Add("A3");
             TableParseLL1[354].NameOfAction.Add("A3");
             TableParseLL1[93].NameOfAction.Add("A3");
-            
+
 
             // end of expression            
             TableParseLL1[102].NameOfAction.Add("A4");
+            TableParseLL1[318].NameOfAction.Add("A4");
             TableParseLL1[95].NameOfAction.Add("A4");
+            #endregion
 
-            //3) -- logical expression 
+            #region//3) -- logical expression
 
+            // save logical sign
+            TableParseLL1[281].NameOfAction.Add("A7");
+            TableParseLL1[282].NameOfAction.Add("A7");
+            TableParseLL1[283].NameOfAction.Add("A7");
+            TableParseLL1[284].NameOfAction.Add("A7");
+            TableParseLL1[285].NameOfAction.Add("A7");
+            TableParseLL1[286].NameOfAction.Add("A7");
+
+            // build four result for logical express
+            TableParseLL1[271].NameOfAction.Add("A8");
             // --
             #endregion
 
+            #region //4) actions for "if else"
 
+            TableParseLL1[253].NameOfAction.Add("B1"); // after logical express in "if"
+            TableParseLL1[293].NameOfAction.Add("B2"); // entry in "else"
+            TableParseLL1[296].NameOfAction.Add("B3"); // end of construction
+            TableParseLL1[297].NameOfAction.Add("B3");
+
+            #endregion
+
+            #region//5) actions for "for"
+
+            // save variables of loop
+            TableParseLL1[318].NameOfAction.Add("C1");
+            TableParseLL1[322].NameOfAction.Add("C1");
+
+            // label for repeat
+
+
+            #endregion
+
+            #endregion
         }
 
         private string ExceptedLexems(List<string> expectedLexems)
@@ -780,5 +923,6 @@ namespace SyntacticTools
             return grammars.FindAll((Rule match) => match.LeftPartRule.Equals(notTerminal));
         }
     }
+
 }
 
