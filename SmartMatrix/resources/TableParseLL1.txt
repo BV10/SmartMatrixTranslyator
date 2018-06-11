@@ -300,17 +300,17 @@ for 	299	-		-	+
 for 	300	+		-	+	
 ( 	301	+		-	+	
 identifier eps 	310	-	302	-	+	
-; 	303	+		-	+	
+; 	303	+		-	+	A4, C1
 ( identifier literal true false eps 	323	-	304	-	+	
-; 	305	+		-	+	
+; 	305	+		-	+	C2
 identifier eps 	334	-	306	-	+	
 ) 	307	+		-	+	
 { 	308	+		-	+	
 identifier if for matrix double integer string bool return eps 	87	-	309	-	+	
-} 	0	+		+	+	
+} 	0	+		+	+	C3
 identifier 	312	-		-	-	
 eps 	315	-		-	+	
-identifier 	313	+		-	+	S7
+identifier 	313	+		-	+	S7, A3
 = 	166	-	314	-	+	
 , eps 	316	-		-	+	
 eps 	0	+		+	+	
@@ -320,7 +320,7 @@ eps 	322	-		-	+
 identifier 	320	+		-	+	S7
 = 	166	-	321	-	+	
 , eps 	316	-		-	+	
-eps 	0	+		+	+	C1
+eps 	0	+		+	+	
 ( identifier literal true false 	325	-		-	-	
 eps 	327	-		-	+	
 ( identifier literal true false 	258	-	326	-	+	

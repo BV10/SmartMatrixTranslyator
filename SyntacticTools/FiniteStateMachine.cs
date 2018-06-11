@@ -63,10 +63,21 @@ namespace SyntacticTools
             StartNotTerminal = startNotTerminal;
         }
 
+        private bool inIterationBlock = false; // check on entry in iteration block
+
         public StateMachine Handle(Lexem lexem)
         {
+           
+
             eps: RecordTableLL1 currentRecordTable = TableParseLL1[CurrentStatePosition];
             bool isCorrectLexem;
+
+            // check on entry in iteration block
+            if (CurrentStatePosition == 305)
+                inIterationBlock = true;
+            else if (CurrentStatePosition == 307)
+                inIterationBlock = false;
+            //
 
             #region I) go along while not accept rule            
             while (!TableParseLL1[CurrentStatePosition].Accept)
@@ -147,7 +158,7 @@ namespace SyntacticTools
             // expected lexem eps, check again
             if (currentRecordTable.ExpectedLexems.Count == 1 && currentRecordTable.ExpectedLexems[0].Equals("eps"))
             {
-                if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action in terminal
+                if (TableParseLL1[CurrentStatePosition].NameOfAction != null && !inIterationBlock) // have action in terminal
                 {
                     foreach (var nameOfAction in TableParseLL1[CurrentStatePosition].NameOfAction)
                     {
@@ -165,7 +176,7 @@ namespace SyntacticTools
 
             //---- before next state do action on terminal
 
-            if (TableParseLL1[CurrentStatePosition].NameOfAction != null) // have action in terminal
+            if (TableParseLL1[CurrentStatePosition].NameOfAction != null && !inIterationBlock) // have action in terminal
             {
                 foreach (var nameOfAction in TableParseLL1[CurrentStatePosition].NameOfAction)
                 {
@@ -276,7 +287,7 @@ namespace SyntacticTools
                     {
                         if (LocalIdentifiers.Find(match => match.Name == lexem.Lex) != null)
                         {
-                            Error = new Error("Semantic error - such identifier  <" + lexem.Lex + "\">  already exist");
+                            Error = new Error("Semantic error - such identifier  <" + lexem.Lex + ">  already exist");
                             Error.PositionInMultiStr = lexem.PositionInMultiStr;
                             return StateMachine.ErrorSemantic;
                         }
@@ -366,7 +377,7 @@ namespace SyntacticTools
                 case "A3":
                     identifierOnLongDistance = lexem;
                     break;
-                // end of expression      
+                // end of operation assign
                 case "A4":
                     CodeOfFours.Add(new Four()
                     {
@@ -502,6 +513,82 @@ namespace SyntacticTools
                 #region Actions "for"
                 case "C1":
                     UpStackIdentOnLongDistance.Push(int.Parse(identifierOnLongDistance.Lex));
+                    // label for entry in else
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "LABEL",
+                        FirstOperand = label.ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+                    StackOfLabel.Push(label);
+
+                    n++; // next number of four
+                    label--; // next label
+
+                    break;
+                // a) get result from condition block
+                // b) JNE on result
+                case "C2":
+                    // cmp with result of logical expression
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "CMP",
+                        FirstOperand = identifierOnLongDistance.Lex,
+                        SecondOperand = "true",
+                        Number = n.ToString()
+                    });
+                    n++;
+
+                    // jne 
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "JNE",
+                        FirstOperand = label.ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+                    StackOfLabel.Push(label); // save label for goto end of loop
+
+                    label--; // next label                  
+                    n++; // next four
+
+                    break;
+                // end of loop
+                case "C3":
+                    int endOfLoop = StackOfLabel.Pop(); // for label end 
+                    int repeatLoop = StackOfLabel.Pop(); // for label repeat loop
+
+                    // iteration of loop
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "+=",
+                        FirstOperand = "ССНС(" + UpStackIdentOnLongDistance.Pop().ToString() + ")",
+                        SecondOperand = "1",
+                        Number = n.ToString()
+                    });
+                    n++;
+
+                    // jump to begin of loop 
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "JMP",
+                        FirstOperand = repeatLoop.ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+                    n++;
+
+                    // label for end of loop
+                    CodeOfFours.Add(new Four()
+                    {
+                        Operation = "LABEL",
+                        FirstOperand = endOfLoop.ToString(),
+                        SecondOperand = "",
+                        Number = n.ToString()
+                    });
+                    n++;
+
                     break;
                     #endregion
             }
@@ -596,16 +683,18 @@ namespace SyntacticTools
 
             #region//2) ---operation assign
 
-            // first ident
+            //  ident for assign
             TableParseLL1[350].NameOfAction.Add("A3");
             TableParseLL1[354].NameOfAction.Add("A3");
             TableParseLL1[93].NameOfAction.Add("A3");
+            TableParseLL1[312].NameOfAction.Add("A3"); // ident in loop
 
 
             // end of expression            
-            TableParseLL1[102].NameOfAction.Add("A4");
-            TableParseLL1[318].NameOfAction.Add("A4");
-            TableParseLL1[95].NameOfAction.Add("A4");
+            TableParseLL1[102].NameOfAction.Add("A4"); // at end of declare operation assign
+            TableParseLL1[302].NameOfAction.Add("A4"); // at end of var of loop ','
+            TableParseLL1[318].NameOfAction.Add("A4"); // at end of var of loop ';'
+            TableParseLL1[95].NameOfAction.Add("A4"); // at the end operation assign(warning, maybe error)
             #endregion
 
             #region//3) -- logical expression
@@ -635,12 +724,15 @@ namespace SyntacticTools
             #region//5) actions for "for"
 
             // save variables of loop
-            TableParseLL1[318].NameOfAction.Add("C1");
-            TableParseLL1[322].NameOfAction.Add("C1");
+            TableParseLL1[302].NameOfAction.Add("C1"); // save var after ';' and label for repeat
+            TableParseLL1[318].NameOfAction.Add("C1"); // save var after ','            
 
-            // label for repeat
+            // a) get result from condition block
+            // b) JNE on result
+            TableParseLL1[304].NameOfAction.Add("C2");
 
-
+            // end of loop '}'
+            TableParseLL1[309].NameOfAction.Add("C3");
             #endregion
 
             #endregion
